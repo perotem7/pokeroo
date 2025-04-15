@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { EventStatus } from "@/generated/prisma"; // Import enum
 
@@ -12,7 +11,7 @@ interface RouteParams {
 
 // PATCH /api/events/[eventId]/complete - Mark an event as completed
 export async function PATCH(request: Request, { params }: RouteParams) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const { eventId } = params;
 
   if (!session?.user?.id) {
