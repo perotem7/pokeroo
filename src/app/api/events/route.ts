@@ -51,7 +51,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { hostId } = await request.json();
+    const { hostId, date } = await request.json();
 
     if (!hostId || typeof hostId !== "string") {
       return NextResponse.json(
@@ -79,7 +79,8 @@ export async function POST(request: Request) {
     const newEvent = await prisma.pokerEvent.create({
       data: {
         hostId: hostId,
-        // date and status have default values in the schema
+        date: date ? new Date(date) : new Date(),
+        // status has a default value in the schema
       },
       include: {
         host: { select: { id: true, name: true } }, // Include host in response

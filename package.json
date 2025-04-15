@@ -13,10 +13,12 @@
     "@auth/prisma-adapter": "^2.8.0",
     "@prisma/client": "^6.6.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/react-datepicker": "^6.2.0",
     "bcryptjs": "^3.0.2",
     "next": "15.3.0",
     "next-auth": "^5.0.0-beta.19",
     "react": "^19.0.0",
+    "react-datepicker": "^8.3.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {

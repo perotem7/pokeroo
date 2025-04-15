@@ -4,6 +4,8 @@ import { useState, useEffect, FormEvent } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import type { Player } from "@/generated/prisma";
 import type { PokerEvent } from "@/generated/prisma";
 
@@ -19,6 +21,7 @@ export default function EventsPage() {
   const [events, setEvents] = useState<EventWithHost[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedHostId, setSelectedHostId] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
   const [isLoadingPlayers, setIsLoadingPlayers] = useState(true);
@@ -78,12 +81,19 @@ export default function EventsPage() {
       setCreateEventError("Please select a host for the event.");
       return;
     }
+    if (!selectedDate) {
+      setCreateEventError("Please select a date for the event.");
+      return;
+    }
 
     try {
       const response = await fetch("/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hostId: selectedHostId }),
+        body: JSON.stringify({
+          hostId: selectedHostId,
+          date: selectedDate.toISOString(),
+        }),
       });
 
       const newEvent = await response.json();
@@ -145,6 +155,22 @@ export default function EventsPage() {
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="flex-grow-0">
+              <label
+                htmlFor="event-date"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Event Date
+              </label>
+              <DatePicker
+                id="event-date"
+                selected={selectedDate}
+                onChange={(date: Date | null) => setSelectedDate(date)}
+                dateFormat="MMMM d, yyyy"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 bg-white"
+                wrapperClassName="w-full"
+              />
             </div>
             <button
               type="submit"

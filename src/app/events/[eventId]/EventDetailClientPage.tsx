@@ -477,9 +477,10 @@ export default function EventDetailClientPage({
                   </tr>
                 ) : (
                   eventDetails.players.map((player) => {
-                    // Calculate profit/loss: cashOutAmount - (buyIns * 100)
-                    const buyInTotal = player.buyIns * 100; // $100 per buy-in
-                    const profitLoss = (player.cashOutAmount ?? 0) - buyInTotal;
+                    // Calculate profit/loss: cashOutAmount - (buyIns * 1000 chips)
+                    const buyInTotalChips = player.buyIns * 1000; // 1000 chips per buy-in
+                    const profitLoss =
+                      (player.cashOutAmount ?? 0) - buyInTotalChips; // Assuming cashOutAmount is also in chips
                     const profitLossClass =
                       profitLoss > 0
                         ? "text-green-600"
@@ -496,18 +497,21 @@ export default function EventDetailClientPage({
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            {player.buyIns} (${buyInTotal})
+                            {player.buyIns} ({buyInTotalChips} chips)
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            ${player.cashOutAmount}
+                            {player.cashOutAmount} chips{" "}
+                            {/* Assuming cashOut is chips */}
                           </div>
                         </td>
                         <td
                           className={`px-6 py-4 whitespace-nowrap text-sm ${profitLossClass}`}
                         >
-                          {profitLoss > 0 ? "+" : ""}${profitLoss}
+                          {profitLoss > 0 ? "+" : ""}
+                          {profitLoss} chips{" "}
+                          {/* Assuming profit/loss is chips */}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
                           {eventDetails.status !== "COMPLETED" && (
@@ -517,7 +521,7 @@ export default function EventDetailClientPage({
                                 className="bg-blue-100 text-blue-800 px-2 py-1 rounded hover:bg-blue-200 transition"
                                 title="Add Buy-In"
                               >
-                                +$100
+                                +1000 Chips
                               </button>
                               <button
                                 onClick={() => openCashOutModal(player)}
@@ -546,11 +550,11 @@ export default function EventDetailClientPage({
               <div className="bg-blue-50 p-3 rounded">
                 <div className="text-sm text-blue-700 mb-1">Total Buy-Ins</div>
                 <div className="text-2xl font-bold">
-                  $
                   {eventDetails.players.reduce(
-                    (sum, p) => sum + p.buyIns * 100,
+                    (sum, p) => sum + p.buyIns * 1000, // Use 1000 multiplier
                     0
-                  )}
+                  )}{" "}
+                  chips
                 </div>
               </div>
               <div className="bg-green-50 p-3 rounded">
@@ -558,25 +562,26 @@ export default function EventDetailClientPage({
                   Total Cash Out
                 </div>
                 <div className="text-2xl font-bold">
-                  $
                   {eventDetails.players.reduce(
                     (sum, p) => sum + (p.cashOutAmount ?? 0),
                     0
-                  )}
+                  )}{" "}
+                  chips {/* Assuming cashOut is chips */}
                 </div>
               </div>
               <div className="bg-gray-50 p-3 rounded">
                 <div className="text-sm text-gray-700 mb-1">Balance</div>
                 <div className="text-2xl font-bold">
-                  $
                   {eventDetails.players.reduce(
+                    // Calculate balance in chips
                     (sum, p) => sum + (p.cashOutAmount ?? 0),
                     0
                   ) -
                     eventDetails.players.reduce(
-                      (sum, p) => sum + p.buyIns * 100,
+                      (sum, p) => sum + p.buyIns * 1000, // Use 1000 multiplier for buy-ins
                       0
-                    )}
+                    )}{" "}
+                  chips
                 </div>
               </div>
             </div>
