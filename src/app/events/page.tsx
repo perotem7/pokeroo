@@ -111,6 +111,39 @@ export default function EventsPage() {
     }
   };
 
+  const handleDeleteEvent = async (eventId: string) => {
+    if (
+      !confirm(
+        "Are you sure you want to delete this event? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setError(null); // Clear previous errors
+    try {
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({})); // Try to get error message
+        throw new Error(errorData.error || "Failed to delete event");
+      }
+
+      // Remove the event from the local state
+      setEvents((prevEvents) =>
+        prevEvents.filter((event) => event.id !== eventId)
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "An unknown error occurred during deletion"
+      );
+    }
+  };
+
   if (isLoading) {
     return <div className="p-6 text-center">Loading events data...</div>;
   }
@@ -210,28 +243,45 @@ export default function EventsPage() {
                 key={event.id}
                 className="p-4 hover:bg-gray-50 transition-colors"
               >
-                <Link href={`/events/${event.id}`} className="block">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="text-lg font-medium text-gray-800">
-                        Event Date: {new Date(event.date).toLocaleDateString()}
-                      </span>
-                      <span
-                        className={`ml-3 px-2 py-0.5 rounded-full text-xs font-medium ${
-                          event.status === "COMPLETED"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-blue-100 text-blue-800"
-                        }`}
-                      >
-                        {event.status}
+                <div className="flex justify-between items-center gap-4">
+                  <Link
+                    href={`/events/${event.id}`}
+                    className="flex-grow block"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <span className="text-lg font-medium text-gray-800">
+                          Event Date:{" "}
+                          {new Date(event.date).toLocaleDateString()}
+                        </span>
+                        <span
+                          className={`ml-3 px-2 py-0.5 rounded-full text-xs font-medium ${
+                            event.status === "COMPLETED"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-blue-100 text-blue-800"
+                          }`}
+                        >
+                          {event.status}
+                        </span>
+                      </div>
+                      <span className="text-gray-600 text-sm">
+                        Host: {event.host?.name || "N/A"}
                       </span>
                     </div>
-                    <span className="text-gray-600 text-sm">
-                      Host: {event.host?.name || "N/A"}
-                    </span>
-                  </div>
-                  {/* Add more details like player count later if needed */}
-                </Link>
+                    {/* Add more details like player count later if needed */}
+                  </Link>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent link navigation
+                      e.stopPropagation(); // Prevent link navigation
+                      handleDeleteEvent(event.id);
+                    }}
+                    className="flex-shrink-0 bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors"
+                    title="Delete Event"
+                  >
+                    Delete
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
