@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EventStatus {
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  players Player[] // A user can create multiple players
+
+  @@map("users")
+}
+
+model Player {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  createdById String @map("created_by_id")
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  pokerEvents  PlayerInEvent[] // Events this player participated in
+  hostedEvents PokerEvent[] // Events this player hosted
+
+  @@index([createdById])
+  @@map("players")
+}
+
+model PokerEvent {
+  id        String      @id @default(uuid())
+  date      DateTime    @default(now())
+  status    EventStatus @default(ONGOING)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  hostId String @map("host_id")
+  host   Player @relation(fields: [hostId], references: [id])
+
+  players PlayerInEvent[] // Players participating in this event
+
+  @@index([hostId])
+  @@map("poker_events")
+}
+
+model PlayerInEvent {
+  id            String   @id @default(uuid())
+  buyIns        Int      @default(0)
+  cashOutAmount Int?     @map("cash_out_amount") // Optional, set when cashing out
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  eventId String     @map("event_id")
+  event   PokerEvent @relation(fields: [eventId], references: [id], onDelete: Cascade) // Cascade delete if event is deleted
+
+  playerId String @map("player_id")
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade) // Cascade delete if player is deleted
+
+  @@unique([eventId, playerId]) // Ensure a player can only be added once per event
+  @@index([eventId])
+  @@index([playerId])
+  @@map("player_in_event")
+}
