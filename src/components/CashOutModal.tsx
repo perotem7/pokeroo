@@ -34,7 +34,7 @@ export default function CashOutModal({
     const numericAmount = parseInt(amount, 10);
 
     if (isNaN(numericAmount) || numericAmount < 0) {
-      setError("Please enter a valid non-negative number.");
+      setError("Please enter a non-negative number.");
       return;
     }
     onSubmit(numericAmount);
