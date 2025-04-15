@@ -2,16 +2,12 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-interface RouteParams {
-  params: {
-    eventId: string;
-  };
-}
-
 // GET /api/events/[eventId] - Fetch details for a specific event
-export async function GET(request: Request, { params }: RouteParams) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function GET(request: Request, context: any) {
+  // Use type assertion
+  const { eventId } = context.params as { eventId: string };
   const session = await auth();
-  const { eventId } = params;
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

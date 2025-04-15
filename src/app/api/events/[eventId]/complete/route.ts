@@ -3,16 +3,11 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { EventStatus } from "@/generated/prisma"; // Import enum
 
-interface RouteParams {
-  params: {
-    eventId: string;
-  };
-}
-
 // PATCH /api/events/[eventId]/complete - Mark an event as completed
-export async function PATCH(request: Request, { params }: RouteParams) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function PATCH(request: Request, context: any) {
+  const { eventId } = context.params as { eventId: string };
   const session = await auth();
-  const { eventId } = params;
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

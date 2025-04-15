@@ -13,7 +13,7 @@ type EventWithHost = PokerEvent & {
 };
 
 export default function EventsPage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
 
   const [events, setEvents] = useState<EventWithHost[]>([]);

@@ -92,8 +92,11 @@ export default function LoginPage() {
         </button>
         {/* Optional: Add link to sign-up page later */}
         <p className="mt-4 text-center text-sm text-gray-600">
-          Don't have an account?{" "}
-          <Link href="/signup" className="text-blue-500 hover:underline">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/signup"
+            className="font-medium text-blue-600 hover:underline"
+          >
             Sign up
           </Link>
         </p>

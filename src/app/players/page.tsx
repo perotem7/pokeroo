@@ -7,7 +7,8 @@ import Link from "next/link";
 import type { Player } from "@/generated/prisma"; // Correct import path for generated Prisma types
 
 export default function PlayersPage() {
-  const { data: session, status } = useSession();
+  // Remove unused 'session' variable
+  const { status } = useSession();
   const router = useRouter();
   const [players, setPlayers] = useState<Player[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");

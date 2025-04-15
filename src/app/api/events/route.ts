@@ -3,7 +3,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 // GET /api/events - Fetch events created by the user (via hosted player)
-export async function GET(request: Request) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function GET(_request: Request) {
   const session = await auth();
 
   if (!session?.user?.id) {

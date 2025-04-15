@@ -1,19 +1,16 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-interface RouteParams {
-  params: {
-    eventId: string;
-    playerInEventId: string; // ID of the PlayerInEvent record
-  };
-}
-
 // PATCH /api/events/[eventId]/players/[playerInEventId] - Update player in event
-export async function PATCH(request: Request, { params }: RouteParams) {
-  const session = await getServerSession(authOptions);
-  const { eventId, playerInEventId } = params;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function PATCH(request: Request, context: any) {
+  // Revert to type assertion
+  const { eventId, playerInEventId } = context.params as {
+    eventId: string;
+    playerInEventId: string;
+  };
+  const session = await auth();
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -54,8 +51,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     }
 
     // Determine if it's a buy-in or cash-out update
-    let updateData: any;
-    const requestBody = await request.json().catch(() => null); // Try to parse JSON body
+    let updateData: { cashOutAmount: number } | { buyIns: { increment: 1 } };
+    const requestBody = await request.json().catch(() => null);
 
     if (requestBody && typeof requestBody.cashOutAmount === "number") {
       // Cash-out update

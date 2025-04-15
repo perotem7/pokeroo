@@ -75,13 +75,18 @@ export const authConfig = {
   callbacks: {
     // Controls if user is allowed to sign in
     async signIn({
-      user,
-      account,
-      profile,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      user: _user, // Prefix unused variable
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      account: _account, // Prefix unused variable
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      profile: _profile, // Prefix unused variable
     }: {
       user: User;
-      account: any;
-      profile?: any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      account: any; // Keep any for now
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      profile?: any; // Keep any for now
     }) {
       // Add any custom sign-in logic here if needed
       // console.log("signIn callback", { user, account, profile });
@@ -92,7 +97,7 @@ export const authConfig = {
       if (user) {
         // User object is available on initial sign-in
         token.id = user.id;
-        token.username = (user as any).username; // Add username if available on user object
+        token.username = (user as User).username;
       }
       // console.log("jwt callback", { token });
       return token;

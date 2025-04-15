@@ -1,38 +1,31 @@
-import type { DefaultSession, User as DefaultUser } from "@auth/core/types";
-import type { JWT as DefaultJWT } from "@auth/core/jwt";
+import type { DefaultSession, User as DefaultUser } from "next-auth";
+import type { JWT as DefaultJWT } from "next-auth/jwt";
 
-declare module "@auth/core/types" {
+declare module "next-auth" {
   /**
-   * Extend the default session types
+   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
   interface Session {
-    user: {
-      /** The user's database ID. */
+    user?: {
       id: string;
-      /** The user's username. */
-      username?: string | null;
-      // Add other properties you want in the session here
-    } & DefaultSession["user"]; // Keep existing default properties like name, email, image
+      username?: string | null; // Add username here
+    } & DefaultSession["user"]; // Keep existing properties like name, email, image
   }
 
   /**
-   * Extend the default user object type (returned by providers)
-   * Ensure this matches the object returned in the Credentials provider's authorize callback
+   * The shape of the user object returned in the OAuth providers `profile` callback,
+   * or the second parameter of the `session` callback, when using a database.
    */
   interface User extends DefaultUser {
-    /** The user's username. */
-    username?: string | null;
-    // Add other properties returned by authorize callback if needed
+    username?: string | null; // Also add username to the base User type if needed
   }
 }
 
-declare module "@auth/core/jwt" {
-  /** Extend the default JWT type */
+declare module "next-auth/jwt" {
+  /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT extends DefaultJWT {
-    /** User's database id */
+    /** OpenID ID Token */
     id?: string;
-    /** User's username */
-    username?: string | null;
-    // Add other properties you want persisted in the token
+    username?: string | null; // Add username to the JWT type
   }
 }

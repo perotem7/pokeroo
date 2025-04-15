@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import SignOutButton from "@/components/SignOutButton";
+import Link from "next/link";
 
 export default async function Home() {
   const session = await auth();
@@ -25,10 +26,9 @@ export default async function Home() {
       </div>
 
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
-        <a
+        <Link
           href="/players"
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
             Players{" "}
@@ -39,12 +39,11 @@ export default async function Home() {
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
             Manage your list of players.
           </p>
-        </a>
+        </Link>
 
-        <a
+        <Link
           href="/events"
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          rel="noopener noreferrer"
         >
           <h2 className={`mb-3 text-2xl font-semibold`}>
             Events{" "}
@@ -55,7 +54,7 @@ export default async function Home() {
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
             View past poker events and create new ones.
           </p>
-        </a>
+        </Link>
       </div>
     </main>
   );

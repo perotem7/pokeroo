@@ -2,16 +2,19 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-interface RouteParams {
-  params: {
-    eventId: string;
-  };
-}
+// Remove or comment out the old interface if no longer needed elsewhere
+// interface RouteParams {
+//   params: {
+//     eventId: string;
+//   };
+// }
 
 // POST /api/events/[eventId]/players - Add a player to an event
-export async function POST(request: Request, { params }: RouteParams) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function POST(request: Request, context: any) {
   const session = await auth();
-  const { eventId } = params;
+  // Assert type for params
+  const { eventId } = context.params as { eventId: string };
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
