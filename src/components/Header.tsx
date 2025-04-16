@@ -21,6 +21,9 @@ export default function Header() {
           <Link href="/events" className="hover:text-purple-200">
             Events
           </Link>
+          <Link href="/analytics" className="hover:text-purple-200">
+            Analytics
+          </Link>
           <SignOutButton />
         </nav>
         {/* Mobile Menu Button */}
@@ -66,6 +69,13 @@ export default function Header() {
             onClick={() => setMenuOpen(false)}
           >
             Events
+          </Link>
+          <Link
+            href="/analytics"
+            className="block py-2 hover:text-purple-200"
+            onClick={() => setMenuOpen(false)}
+          >
+            Analytics
           </Link>
           <div className="mt-2">
             <SignOutButton />
