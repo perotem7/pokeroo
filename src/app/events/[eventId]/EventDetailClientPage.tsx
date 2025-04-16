@@ -484,6 +484,9 @@ export default function EventDetailClientPage({
                         ? "text-red-600"
                         : "";
 
+                    // Calculate monetary value (1000 chips = 50 NIS => 1 chip = 0.05 NIS)
+                    const monetaryValue = profitLoss * 0.05;
+
                     return (
                       <tr key={player.id}>
                         <td className="px-3 py-4 whitespace-nowrap">
@@ -516,7 +519,12 @@ export default function EventDetailClientPage({
                         <td className="px-3 py-4 whitespace-nowrap text-center text-sm font-medium">
                           {eventDetails.status === "COMPLETED" ? (
                             <div className={`font-semibold ${profitLossClass}`}>
-                              {profitLoss} chips
+                              <span className="block">
+                                {monetaryValue.toFixed(2)} NIS
+                              </span>
+                              <span className="block text-xs text-gray-600">
+                                ({profitLoss} chips)
+                              </span>
                             </div>
                           ) : (
                             <div className="flex flex-col items-center gap-2">
