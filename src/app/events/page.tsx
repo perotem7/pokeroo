@@ -153,14 +153,7 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 max-w-4xl">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Poker Events</h1>
-        <Link href="/" className="text-blue-600 hover:underline">
-          &larr; Back to Dashboard
-        </Link>
-      </div>
-
+    <div className="container mx-auto p-4 sm:p-6 pt-6 max-w-4xl">
       {/* Create Event Form */}
       {players.length > 0 ? (
         <form
@@ -207,7 +200,7 @@ export default function EventsPage() {
             </div>
             <button
               type="submit"
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors self-end sm:self-center mt-2 sm:mt-0"
+              className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors self-end sm:self-center mt-2 sm:mt-0"
             >
               Create Event
             </button>
@@ -257,7 +250,7 @@ export default function EventsPage() {
                         <span
                           className={`ml-3 px-2 py-0.5 rounded-full text-xs font-medium ${
                             event.status === "COMPLETED"
-                              ? "bg-green-100 text-green-800"
+                              ? "bg-purple-100 text-purple-800"
                               : "bg-blue-100 text-blue-800"
                           }`}
                         >
@@ -276,7 +269,7 @@ export default function EventsPage() {
                       e.stopPropagation(); // Prevent link navigation
                       handleDeleteEvent(event.id);
                     }}
-                    className="flex-shrink-0 bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors"
+                    className="flex-shrink-0 bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors"
                     title="Delete Event"
                   >
                     Delete

@@ -27,7 +27,7 @@ export default function LoginPage() {
         console.error("Sign-in error:", result.error); // Log detailed error
       } else if (result?.ok) {
         // Sign-in successful
-        router.push("/"); // Redirect to homepage or dashboard
+        router.push("/events"); // Redirect to events page
       } else {
         // Handle other potential states if needed
         setError("An unexpected error occurred. Please try again.");
