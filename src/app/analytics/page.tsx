@@ -130,9 +130,10 @@ export default function AnalyticsPage() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data: OverallTrendPoint[] = await response.json();
         setOverallTrendsData(data);
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error("Failed overall trends fetch:", e);
-        setErrorOverallTrends(e.message || "Error");
+        const errorMessage = e instanceof Error ? e.message : "Unknown error";
+        setErrorOverallTrends(errorMessage);
       } finally {
         setLoadingOverallTrends(false);
       }
@@ -150,9 +151,10 @@ export default function AnalyticsPage() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data: PlayerTrendsData = await response.json();
         setPlayerTrendsData(data);
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error("Failed player trends fetch:", e);
-        setErrorPlayerTrends(e.message || "Error");
+        const errorMessage = e instanceof Error ? e.message : "Unknown error";
+        setErrorPlayerTrends(errorMessage);
       } finally {
         setLoadingPlayerTrends(false);
       }

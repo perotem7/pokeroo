@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import type { PokerEvent, PlayerInEvent, Player } from "@/generated/prisma";
+import type { PokerEvent, PlayerInEvent } from "@/generated/prisma";
 
 // Constants from event-summary (could be shared)
 const CHIPS_PER_BUY_IN = 1000;
@@ -44,7 +44,6 @@ export async function GET() {
 
     let cumulativeBuyIns = 0;
     let cumulativeCashOuts = 0;
-    let cumulativeNet = 0;
 
     const trendData: OverallTrendPoint[] = events.map((event) => {
       let eventBuyInsCount = 0;
@@ -58,11 +57,10 @@ export async function GET() {
       const eventBuyInsNIS = eventBuyInsCount * NIS_PER_BUY_IN;
       const eventCashOutNIS = eventCashOutChips / CHIPS_PER_NIS;
       // Net for the event should be cash out - buy in
-      const eventNetNIS = eventCashOutNIS - eventBuyInsNIS;
+      // const eventNetNIS = eventCashOutNIS - eventBuyInsNIS; // Removed unused variable
 
       cumulativeBuyIns += eventBuyInsNIS;
       cumulativeCashOuts += eventCashOutNIS;
-      cumulativeNet += eventNetNIS; // This should ideally stay near 0
 
       return {
         date: event.date.toISOString(),
