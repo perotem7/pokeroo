@@ -21,7 +21,8 @@ export interface EventSummaryData {
   hostName: string;
   numberOfPlayers: number;
   totalBuyInsCount: number;
-  totalCashOutAmount: number; // This is likely in Chips, need clarification?
+  totalCashOutChips: number; // Renamed from totalCashOutAmount
+  totalCashOutNIS: number; // Added total cash out in NIS
   status: string;
   participants: ParticipantDetails[]; // Updated participant type
   totalPotValue: number; // In NIS
@@ -107,6 +108,7 @@ export async function GET() {
           event.players.length > 0
             ? totalProfitLossNIS / event.players.length
             : 0;
+        const totalCashOutNIS = totalCashOutChips / CHIPS_PER_NIS; // Calculate total cash out in NIS
 
         // Note: totalProfitLossNIS should ideally be close to zero if accounting is perfect
         // console.log(`Event ${event.id}: Total P/L (NIS) = ${totalProfitLossNIS}, Total Pot (NIS) = ${totalPotValueNIS}, Total Cashout (Chips) = ${totalCashOutChips}`);
@@ -117,7 +119,8 @@ export async function GET() {
           hostName: event.host.name,
           numberOfPlayers: event.players.length,
           totalBuyInsCount: totalBuyInsCount,
-          totalCashOutAmount: totalCashOutChips, // Return total chips cashed out
+          totalCashOutChips: totalCashOutChips, // Renamed field
+          totalCashOutNIS: totalCashOutNIS, // Added field
           status: event.status,
           participants: participants,
           totalPotValue: totalPotValueNIS,

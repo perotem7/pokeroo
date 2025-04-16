@@ -2,6 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import type { EventSummaryData } from "@/app/api/analytics/event-summary/route"; // Import the interface
+import type { OverallTrendPoint } from "@/app/api/analytics/overall-trends/route"; // Import type
+import type { PlayerTrendsData } from "@/app/api/analytics/player-trends/route"; // Import type
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  AreaChart, // Using Area chart for Buyin/Cashout
+  Area,
+} from "recharts";
 
 // Define the structure for player performance data matching the API
 interface PlayerPerformance {
@@ -14,6 +28,14 @@ interface PlayerPerformance {
   netProfitLoss: number;
   eventsPlayed: number;
 }
+
+// Helper to format date ticks
+const formatDateTick = (tickItem: string) => {
+  return new Date(tickItem).toLocaleDateString();
+};
+
+// Helper to format currency ticks/tooltips
+const formatCurrency = (value: number) => `NIS ${value.toLocaleString()}`;
 
 export default function AnalyticsPage() {
   // --- State for Player Performance ---
@@ -29,6 +51,24 @@ export default function AnalyticsPage() {
   );
   const [loadingEvents, setLoadingEvents] = useState(true);
   const [errorEvents, setErrorEvents] = useState<string | null>(null);
+
+  // --- State for Overall Trends ---
+  const [overallTrendsData, setOverallTrendsData] = useState<
+    OverallTrendPoint[]
+  >([]);
+  const [loadingOverallTrends, setLoadingOverallTrends] = useState(true);
+  const [errorOverallTrends, setErrorOverallTrends] = useState<string | null>(
+    null
+  );
+
+  // --- State for Player Trends ---
+  const [playerTrendsData, setPlayerTrendsData] = useState<PlayerTrendsData>(
+    {}
+  );
+  const [loadingPlayerTrends, setLoadingPlayerTrends] = useState(true);
+  const [errorPlayerTrends, setErrorPlayerTrends] = useState<string | null>(
+    null
+  );
 
   // Fetch Player Performance Data
   useEffect(() => {
@@ -80,8 +120,48 @@ export default function AnalyticsPage() {
     fetchEventData();
   }, []);
 
+  // Fetch Overall Trends
+  useEffect(() => {
+    async function fetchOverallTrends() {
+      setLoadingOverallTrends(true);
+      setErrorOverallTrends(null);
+      try {
+        const response = await fetch("/api/analytics/overall-trends");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data: OverallTrendPoint[] = await response.json();
+        setOverallTrendsData(data);
+      } catch (e: any) {
+        console.error("Failed overall trends fetch:", e);
+        setErrorOverallTrends(e.message || "Error");
+      } finally {
+        setLoadingOverallTrends(false);
+      }
+    }
+    fetchOverallTrends();
+  }, []);
+
+  // Fetch Player Trends
+  useEffect(() => {
+    async function fetchPlayerTrends() {
+      setLoadingPlayerTrends(true);
+      setErrorPlayerTrends(null);
+      try {
+        const response = await fetch("/api/analytics/player-trends");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data: PlayerTrendsData = await response.json();
+        setPlayerTrendsData(data);
+      } catch (e: any) {
+        console.error("Failed player trends fetch:", e);
+        setErrorPlayerTrends(e.message || "Error");
+      } finally {
+        setLoadingPlayerTrends(false);
+      }
+    }
+    fetchPlayerTrends();
+  }, []);
+
   return (
-    <div className="container mx-auto p-4 space-y-8">
+    <div className="container mx-auto p-4 space-y-12">
       {/* --- Player Performance Section --- */}
       <section>
         <h1 className="text-2xl font-bold mb-4">Player Performance</h1>
@@ -137,7 +217,7 @@ export default function AnalyticsPage() {
                             : "text-red-600"
                         }`}
                       >
-                        {player.netProfitLoss.toLocaleString()}
+                        {formatCurrency(player.netProfitLoss)}
                       </td>
                     </tr>
                   ))}
@@ -190,7 +270,7 @@ export default function AnalyticsPage() {
                         {event.numberOfPlayers}
                       </td>
                       <td className="py-3 px-4 text-center">
-                        NIS {event.totalPotValue.toLocaleString()}
+                        {formatCurrency(event.totalPotValue)}
                       </td>
                       <td
                         className={`py-3 px-4 text-center ${
@@ -201,20 +281,20 @@ export default function AnalyticsPage() {
                             : "text-red-600"
                         }`}
                       >
-                        NIS {event.averageProfitLoss.toFixed(2)}
+                        {formatCurrency(event.averageProfitLoss)}
                       </td>
                       <td className="py-3 px-4 text-center text-green-600">
                         {event.biggestWinner
-                          ? `${
-                              event.biggestWinner.name
-                            } (+NIS ${event.biggestWinner.amount.toLocaleString()})`
+                          ? `${event.biggestWinner.name} (+${formatCurrency(
+                              event.biggestWinner.amount
+                            )})`
                           : "-"}
                       </td>
                       <td className="py-3 px-4 text-center text-red-600">
                         {event.biggestLoser
-                          ? `${
-                              event.biggestLoser.name
-                            } (NIS ${event.biggestLoser.amount.toLocaleString()})`
+                          ? `${event.biggestLoser.name} (${formatCurrency(
+                              event.biggestLoser.amount
+                            )})`
                           : "-"}
                       </td>
                     </tr>
@@ -226,6 +306,123 @@ export default function AnalyticsPage() {
             )}
           </div>
         )}
+      </section>
+
+      {/* --- Overall Trends Section --- */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Overall Trends</h2>
+        {loadingOverallTrends && <p>Loading trends...</p>}
+        {errorOverallTrends && (
+          <p className="text-red-500">
+            Error loading trends: {errorOverallTrends}
+          </p>
+        )}
+        {!loadingOverallTrends &&
+          !errorOverallTrends &&
+          overallTrendsData.length > 0 && (
+            <div
+              style={{ width: "100%", height: 300 }}
+              className="bg-white shadow-md rounded-lg p-4"
+            >
+              <ResponsiveContainer>
+                <AreaChart
+                  data={overallTrendsData}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" tickFormatter={formatDateTick} />
+                  <YAxis tickFormatter={formatCurrency} />
+                  <Tooltip
+                    formatter={formatCurrency}
+                    labelFormatter={formatDateTick}
+                  />
+                  <Legend />
+                  <Area
+                    type="monotone"
+                    dataKey="cumulativeBuyInsNIS"
+                    stackId="1"
+                    stroke="#dc2626"
+                    fill="#fecaca"
+                    name="Cumulative Buy-Ins"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="cumulativeCashOutsNIS"
+                    stackId="1"
+                    stroke="#16a34a"
+                    fill="#dcfce7"
+                    name="Cumulative Cash Outs"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        {!loadingOverallTrends &&
+          !errorOverallTrends &&
+          overallTrendsData.length === 0 && (
+            <p>No overall trend data available yet.</p>
+          )}
+      </section>
+
+      {/* --- Individual Player Trends Section --- */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">
+          Individual Player Trends (Cumulative P/L)
+        </h2>
+        {loadingPlayerTrends && <p>Loading player trends...</p>}
+        {errorPlayerTrends && (
+          <p className="text-red-500">
+            Error loading player trends: {errorPlayerTrends}
+          </p>
+        )}
+        {!loadingPlayerTrends &&
+          !errorPlayerTrends &&
+          Object.keys(playerTrendsData).length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {Object.entries(playerTrendsData).map(([playerId, data]) => (
+                <div
+                  key={playerId}
+                  className="bg-white shadow-md rounded-lg p-4"
+                >
+                  <h3 className="text-lg font-semibold mb-2 text-center">
+                    {data.playerName}
+                  </h3>
+                  <div style={{ width: "100%", height: 250 }}>
+                    <ResponsiveContainer>
+                      <LineChart
+                        data={data.trend}
+                        margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" tickFormatter={formatDateTick} />
+                        <YAxis tickFormatter={formatCurrency} />
+                        <Tooltip
+                          formatter={(value: number) => [
+                            formatCurrency(value),
+                            "Cumulative P/L",
+                          ]}
+                          labelFormatter={formatDateTick}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="cumulativeProfitLossNIS"
+                          stroke="#8884d8"
+                          strokeWidth={2}
+                          dot={false}
+                          name="Cumulative P/L"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        {!loadingPlayerTrends &&
+          !errorPlayerTrends &&
+          Object.keys(playerTrendsData).length === 0 && (
+            <p>No individual player trend data available yet.</p>
+          )}
       </section>
     </div>
   );
