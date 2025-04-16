@@ -234,47 +234,44 @@ export default function EventsPage() {
             {events.map((event) => (
               <li
                 key={event.id}
-                className="p-4 hover:bg-gray-50 transition-colors"
+                className="p-4 flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors"
               >
-                <div className="flex justify-between items-center gap-4">
-                  <Link
-                    href={`/events/${event.id}`}
-                    className="flex-grow block"
+                <Link
+                  href={`/events/${event.id}`}
+                  className="flex flex-col flex-grow min-w-0 mr-4"
+                >
+                  <span
+                    className="text-lg font-medium text-gray-800 truncate"
+                    title={event.host?.name || "N/A"}
                   >
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <span className="text-lg font-medium text-gray-800">
-                          Event Date:{" "}
-                          {new Date(event.date).toLocaleDateString()}
-                        </span>
-                        <span
-                          className={`ml-3 px-2 py-0.5 rounded-full text-xs font-medium ${
-                            event.status === "COMPLETED"
-                              ? "bg-purple-100 text-purple-800"
-                              : "bg-blue-100 text-blue-800"
-                          }`}
-                        >
-                          {event.status}
-                        </span>
-                      </div>
-                      <span className="text-gray-600 text-sm">
-                        Host: {event.host?.name || "N/A"}
-                      </span>
-                    </div>
-                    {/* Add more details like player count later if needed */}
-                  </Link>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault(); // Prevent link navigation
-                      e.stopPropagation(); // Prevent link navigation
-                      handleDeleteEvent(event.id);
-                    }}
-                    className="flex-shrink-0 bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors"
-                    title="Delete Event"
-                  >
-                    Delete
-                  </button>
-                </div>
+                    Host: {event.host?.name || "N/A"}
+                  </span>
+                  <span className="text-sm text-gray-600">
+                    {new Date(event.date).toLocaleDateString()}
+                  </span>
+                </Link>
+
+                <span
+                  className={`flex-shrink-0 px-2 py-0.5 rounded-full text-xs font-medium ${
+                    event.status === "COMPLETED"
+                      ? "bg-purple-100 text-purple-800"
+                      : "bg-blue-100 text-blue-800"
+                  }`}
+                >
+                  {event.status}
+                </span>
+
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleDeleteEvent(event.id);
+                  }}
+                  className="flex-shrink-0 bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors"
+                  title="Delete Event"
+                >
+                  Delete
+                </button>
               </li>
             ))}
           </ul>

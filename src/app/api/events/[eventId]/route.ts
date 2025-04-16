@@ -2,11 +2,18 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+// Define the expected structure for the context parameter
+interface RouteContext {
+  params: {
+    eventId: string;
+  };
+}
+
 // GET /api/events/[eventId] - Fetch details for a specific event
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function GET(request: Request, context: any) {
-  // Use type assertion
-  const { eventId } = context.params as { eventId: string };
+export async function GET(request: Request, context: RouteContext) {
+  // Destructure eventId directly from context.params
+  const { eventId } = context.params;
   const session = await auth();
 
   if (!session?.user?.id) {

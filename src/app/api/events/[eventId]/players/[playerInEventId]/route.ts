@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function PATCH(request: Request, context: any) {
   // Revert to type assertion
-  const { eventId, playerInEventId } = context.params as {
+  const { eventId, playerInEventId } = (await context.params) as {
     eventId: string;
     playerInEventId: string;
   };

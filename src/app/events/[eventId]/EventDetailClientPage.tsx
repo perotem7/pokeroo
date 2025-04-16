@@ -407,7 +407,7 @@ export default function EventDetailClientPage({
                 </select>
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition"
+                  className="bg-purple-700 text-white px-3 py-1 rounded text-sm hover:bg-purple-800 transition"
                   disabled={availablePlayersToAdd.length === 0}
                 >
                   Add Player
@@ -435,33 +435,29 @@ export default function EventDetailClientPage({
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Player
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Buy-Ins
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Cash Out
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Profit/Loss
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Actions
+                    {eventDetails.status === "COMPLETED"
+                      ? "Balance"
+                      : "Actions"}
                   </th>
                 </tr>
               </thead>
@@ -469,8 +465,8 @@ export default function EventDetailClientPage({
                 {eventDetails.players.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={5}
-                      className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500"
+                      colSpan={4}
+                      className="px-3 py-4 whitespace-nowrap text-center text-sm text-gray-500"
                     >
                       No players in this event yet
                     </td>
@@ -490,43 +486,52 @@ export default function EventDetailClientPage({
 
                     return (
                       <tr key={player.id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-3 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-900">
                             {player.player?.name || "Unknown Player"}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {player.buyIns} ({buyInTotalChips} chips)
+                        <td className="px-3 py-4 whitespace-nowrap">
+                          <div className="flex flex-col text-sm text-gray-900">
+                            <span>{player.buyIns} buy-ins</span>
+                            <span className="text-xs text-gray-600">
+                              ({buyInTotalChips} chips)
+                            </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {player.cashOutAmount} chips{" "}
-                            {/* Assuming cashOut is chips */}
+                        <td className="px-3 py-4 whitespace-nowrap">
+                          <div className="flex flex-col items-center text-sm text-gray-900">
+                            {player.cashOutAmount === null ? (
+                              <span>-</span>
+                            ) : (
+                              <>
+                                <span>{player.cashOutAmount}</span>
+                                <span className="text-xs text-gray-600">
+                                  chips
+                                </span>
+                              </>
+                            )}
                           </div>
                         </td>
-                        <td
-                          className={`px-6 py-4 whitespace-nowrap text-sm ${profitLossClass}`}
-                        >
-                          {profitLoss > 0 ? "+" : ""}
-                          {profitLoss} chips{" "}
-                          {/* Assuming profit/loss is chips */}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
-                          {eventDetails.status !== "COMPLETED" && (
-                            <div className="flex justify-center gap-2">
+                        <td className="px-3 py-4 whitespace-nowrap text-center text-sm font-medium">
+                          {eventDetails.status === "COMPLETED" ? (
+                            <div className={`font-semibold ${profitLossClass}`}>
+                              {profitLoss} chips
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center gap-2">
                               <button
                                 onClick={() => handleIncrementBuyIn(player.id)}
-                                className="bg-blue-100 text-blue-800 px-2 py-1 rounded hover:bg-blue-200 transition"
-                                title="Add Buy-In"
+                                className="bg-blue-100 hover:bg-blue-200 text-blue-800 transition text-sm px-3 py-1.5 rounded w-full"
+                                title="Increment Buy-in"
                               >
-                                +1000 Chips
+                                Buy-in
                               </button>
                               <button
                                 onClick={() => openCashOutModal(player)}
-                                className="bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200 transition"
-                                title="Set Cash Out Amount"
+                                className="bg-green-100 hover:bg-green-200 text-green-800 transition text-sm px-3 py-1.5 rounded disabled:opacity-50 disabled:cursor-not-allowed w-full"
+                                title="Record Cash Out"
+                                disabled={player.cashOutAmount !== null}
                               >
                                 Cash Out
                               </button>
