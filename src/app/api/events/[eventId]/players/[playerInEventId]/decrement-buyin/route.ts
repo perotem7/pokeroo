@@ -1,11 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { eventId: string; playerInEventId: string } }
+  request: NextRequest,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context: any // Using any as per other project routes
 ) {
-  const { eventId, playerInEventId } = params;
+  // Assert the type of params
+  const { eventId, playerInEventId } = context.params as {
+    eventId: string;
+    playerInEventId: string;
+  };
 
   if (!eventId || !playerInEventId) {
     return NextResponse.json(
