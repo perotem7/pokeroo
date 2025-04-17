@@ -16,6 +16,7 @@ import {
   AreaChart, // Using Area chart for Buyin/Cashout
   Area,
 } from "recharts";
+import type { GeneralStatsData } from "../api/analytics/general-stats/route";
 
 // Define the structure for player performance data matching the API
 interface PlayerPerformance {
@@ -36,6 +37,12 @@ const formatDateTick = (tickItem: string) => {
 
 // Helper to format currency ticks/tooltips
 const formatCurrency = (value: number) => `NIS ${value.toLocaleString()}`;
+
+// Function to format numbers to 1 decimal place
+const formatAvg = (value: number) => value.toFixed(1);
+
+// Function to format chips (no decimals)
+const formatChips = (value: number) => Math.round(value).toLocaleString();
 
 export default function AnalyticsPage() {
   // --- State for Player Performance ---
@@ -67,6 +74,15 @@ export default function AnalyticsPage() {
   );
   const [loadingPlayerTrends, setLoadingPlayerTrends] = useState(true);
   const [errorPlayerTrends, setErrorPlayerTrends] = useState<string | null>(
+    null
+  );
+
+  // Add state for General Stats
+  const [generalStats, setGeneralStats] = useState<GeneralStatsData | null>(
+    null
+  );
+  const [loadingGeneralStats, setLoadingGeneralStats] = useState(true);
+  const [errorGeneralStats, setErrorGeneralStats] = useState<string | null>(
     null
   );
 
@@ -162,6 +178,27 @@ export default function AnalyticsPage() {
     fetchPlayerTrends();
   }, []);
 
+  // Fetch General Stats
+  useEffect(() => {
+    async function fetchGeneralStats() {
+      setLoadingGeneralStats(true);
+      setErrorGeneralStats(null);
+      try {
+        const response = await fetch("/api/analytics/general-stats");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data: GeneralStatsData = await response.json();
+        setGeneralStats(data);
+      } catch (e: unknown) {
+        console.error("Failed general stats fetch:", e);
+        const errorMessage = e instanceof Error ? e.message : "Unknown error";
+        setErrorGeneralStats(errorMessage);
+      } finally {
+        setLoadingGeneralStats(false);
+      }
+    }
+    fetchGeneralStats();
+  }, []);
+
   return (
     <div className="container mx-auto p-4 space-y-12">
       {/* --- Player Performance Section --- */}
@@ -177,16 +214,16 @@ export default function AnalyticsPage() {
               <table className="min-w-full bg-white shadow-md rounded-lg">
                 <thead className="bg-gray-200">
                   <tr>
-                    <th className="py-3 px-4 text-left">Rank</th>
-                    <th className="py-3 px-4 text-left">Player Name</th>
-                    <th className="py-3 px-4 text-right">Events Played</th>
-                    <th className="py-3 px-4 text-right">
+                    <th className="py-3 px-4 text-center">Rank</th>
+                    <th className="py-3 px-4 text-center">Player Name</th>
+                    <th className="py-3 px-4 text-center">Events Played</th>
+                    <th className="py-3 px-4 text-center">
                       Total Buy-Ins (Count)
                     </th>
-                    <th className="py-3 px-4 text-right">
+                    <th className="py-3 px-4 text-center">
                       Total Cash Out (Chips)
                     </th>
-                    <th className="py-3 px-4 text-right">
+                    <th className="py-3 px-4 text-center">
                       Net Profit/Loss (NIS)
                     </th>
                   </tr>
@@ -232,6 +269,54 @@ export default function AnalyticsPage() {
         )}
       </section>
 
+      {/* --- NEW General Statistics Section --- */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">General Statistics</h2>
+        {loadingGeneralStats && <p>Loading general statistics...</p>}
+        {errorGeneralStats && (
+          <p className="text-red-500">
+            Error loading data: {errorGeneralStats}
+          </p>
+        )}
+        {!loadingGeneralStats && !errorGeneralStats && generalStats && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-white p-4 rounded shadow-sm border text-center">
+              <div className="text-sm text-gray-600 mb-1">Games Played</div>
+              <div className="text-3xl font-bold">
+                {generalStats.numberOfGames}
+              </div>
+            </div>
+            <div className="bg-white p-4 rounded shadow-sm border text-center">
+              <div className="text-sm text-gray-600 mb-1">
+                Avg Players / Game
+              </div>
+              <div className="text-3xl font-bold">
+                {formatAvg(generalStats.avgPlayersPerGame)}
+              </div>
+            </div>
+            <div className="bg-white p-4 rounded shadow-sm border text-center">
+              <div className="text-sm text-gray-600 mb-1">
+                Avg Buy-Ins / Game
+              </div>
+              <div className="text-3xl font-bold">
+                {formatAvg(generalStats.avgBuyInsPerGame)}
+              </div>
+            </div>
+            <div className="bg-white p-4 rounded shadow-sm border text-center">
+              <div className="text-sm text-gray-600 mb-1">
+                Avg Cash Out / Game (Chips)
+              </div>
+              <div className="text-3xl font-bold">
+                {formatChips(generalStats.avgOfAvgCashOutPerGame)}
+              </div>
+            </div>
+          </div>
+        )}
+        {!loadingGeneralStats && !errorGeneralStats && !generalStats && (
+          <p>No general statistics data available.</p>
+        )}
+      </section>
+
       {/* --- Event Summary Section --- */}
       <section>
         <h2 className="text-2xl font-bold mb-4">Event Summaries</h2>
@@ -245,13 +330,13 @@ export default function AnalyticsPage() {
               <table className="min-w-full bg-white shadow-md rounded-lg">
                 <thead className="bg-gray-200">
                   <tr>
-                    <th className="py-3 px-4 text-left">Date</th>
-                    <th className="py-3 px-4 text-left">Host</th>
-                    <th className="py-3 px-4 text-right">Players</th>
-                    <th className="py-3 px-4 text-right">Total Pot (NIS)</th>
-                    <th className="py-3 px-4 text-right">Avg P/L (NIS)</th>
-                    <th className="py-3 px-4 text-left">Biggest Winner</th>
-                    <th className="py-3 px-4 text-left">Biggest Loser</th>
+                    <th className="py-3 px-4 text-center">Date</th>
+                    <th className="py-3 px-4 text-center">Host</th>
+                    <th className="py-3 px-4 text-center">Players</th>
+                    <th className="py-3 px-4 text-center">Total Pot (NIS)</th>
+                    <th className="py-3 px-4 text-center">Avg P/L (NIS)</th>
+                    <th className="py-3 px-4 text-center">Biggest Winner</th>
+                    <th className="py-3 px-4 text-center">Biggest Loser</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -212,6 +212,91 @@ export default function EventDetailClientPage({
     }
   };
 
+  // Handler for Decrementing Buy-In
+  const handleDecrementBuyIn = async (
+    playerInEventId: string,
+    currentBuyIns: number
+  ) => {
+    if (currentBuyIns <= 0) {
+      console.warn("Cannot decrement buy-ins below zero.");
+      return;
+    }
+
+    if (window.confirm("Are you sure you want to remove a buy-in?")) {
+      setUpdateError(null); // Clear previous errors
+      // Store the original buy-in count for potential revert
+      const originalBuyIns = currentBuyIns;
+
+      // Optimistic UI Update
+      setEventDetails((prevDetails) => {
+        if (!prevDetails) return null;
+        return {
+          ...prevDetails,
+          players: prevDetails.players.map((p) =>
+            p.id === playerInEventId ? { ...p, buyIns: p.buyIns - 1 } : p
+          ),
+        };
+      });
+
+      try {
+        const response = await fetch(
+          `/api/events/${eventId}/players/${playerInEventId}/decrement-buyin`,
+          {
+            method: "PUT",
+          }
+        );
+
+        const updatedPlayer = await response.json();
+
+        if (!response.ok) {
+          // Revert optimistic update on failure
+          setEventDetails((prevDetails) => {
+            if (!prevDetails) return null;
+            return {
+              ...prevDetails,
+              players: prevDetails.players.map((p) =>
+                p.id === playerInEventId ? { ...p, buyIns: originalBuyIns } : p
+              ),
+            };
+          });
+          throw new Error(
+            updatedPlayer.error || `HTTP Error: ${response.status}`
+          );
+        }
+
+        // On success, the optimistic update is already correct.
+        // Optionally, could update state with the exact response if needed:
+        // setEventDetails((prevDetails) => {
+        //   if (!prevDetails) return null;
+        //   return {
+        //     ...prevDetails,
+        //     players: prevDetails.players.map((p) =>
+        //       p.id === playerInEventId ? { ...p, buyIns: updatedPlayer.buyIns } : p
+        //     ),
+        //   };
+        // });
+      } catch (err) {
+        console.error("Decrement buy-in error:", err);
+        const message =
+          err instanceof Error
+            ? err.message
+            : "An unknown error occurred while decrementing buy-in";
+        setUpdateError(message);
+        // Revert optimistic update if not already done in the !response.ok block
+        // This handles network errors etc.
+        setEventDetails((prevDetails) => {
+          if (!prevDetails) return null;
+          return {
+            ...prevDetails,
+            players: prevDetails.players.map((p) =>
+              p.id === playerInEventId ? { ...p, buyIns: originalBuyIns } : p
+            ),
+          };
+        });
+      }
+    }
+  };
+
   // Modal open/close handlers
   const openCashOutModal = (player: EventPlayer) => {
     setSelectedPlayerForCashOut(player);
@@ -495,10 +580,10 @@ export default function EventDetailClientPage({
                           </div>
                         </td>
                         <td className="px-3 py-4 whitespace-nowrap">
-                          <div className="flex flex-col text-sm text-gray-900">
+                          <div className="flex flex-col items-center text-sm text-gray-900">
                             <span>{player.buyIns} buy-ins</span>
                             <span className="text-xs text-gray-600">
-                              ({buyInTotalChips} chips)
+                              ({buyInTotalChips})
                             </span>
                           </div>
                         </td>
@@ -528,16 +613,43 @@ export default function EventDetailClientPage({
                             </div>
                           ) : (
                             <div className="flex flex-col items-center gap-2">
-                              <button
-                                onClick={() => handleIncrementBuyIn(player.id)}
-                                className="bg-blue-100 hover:bg-blue-200 text-blue-800 transition text-sm px-3 py-1.5 rounded w-full"
-                                title="Increment Buy-in"
-                              >
-                                Buy-in
-                              </button>
+                              {/* Buy-in Controls */}
+                              <div className="flex items-center justify-center border border-gray-300 rounded w-9/10 overflow-hidden">
+                                <button
+                                  onClick={() =>
+                                    handleDecrementBuyIn(
+                                      player.id,
+                                      player.buyIns
+                                    )
+                                  }
+                                  className={`px-3 py-1.5 text-base ${
+                                    player.buyIns <= 0
+                                      ? "text-gray-400 cursor-not-allowed"
+                                      : "text-red-600 hover:bg-red-100"
+                                  } rounded-l transition`}
+                                  disabled={player.buyIns <= 0}
+                                  title="Decrement Buy-in"
+                                >
+                                  -
+                                </button>
+                                <span className="flex-grow text-center py-1.5 text-sm font-medium text-gray-700 bg-gray-50">
+                                  Buy
+                                </span>
+                                <button
+                                  onClick={() =>
+                                    handleIncrementBuyIn(player.id)
+                                  }
+                                  className="px-3 py-1.5 text-base text-blue-600 hover:bg-blue-100 rounded-r transition"
+                                  title="Increment Buy-in"
+                                >
+                                  +
+                                </button>
+                              </div>
+
+                              {/* Cash Out Button */}
                               <button
                                 onClick={() => openCashOutModal(player)}
-                                className="bg-green-100 hover:bg-green-200 text-green-800 transition text-sm px-3 py-1.5 rounded w-full"
+                                className="bg-green-100 hover:bg-green-200 text-green-800 transition text-sm px-3 py-1.5 rounded w-9/10"
                                 title="Record Cash Out"
                               >
                                 Cash Out
