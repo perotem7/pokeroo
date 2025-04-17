@@ -28,6 +28,8 @@ interface PlayerPerformance {
   totalCashOutChips: number;
   netProfitLoss: number;
   eventsPlayed: number;
+  avgBuyIns: number;
+  avgCashOutChips: number;
 }
 
 // Helper to format date ticks
@@ -217,15 +219,15 @@ export default function AnalyticsPage() {
                     <th className="py-3 px-4 text-center">Rank</th>
                     <th className="py-3 px-4 text-center">Player Name</th>
                     <th className="py-3 px-4 text-center">Events Played</th>
-                    <th className="py-3 px-4 text-center">
-                      Total Buy-Ins (Count)
-                    </th>
+                    <th className="py-3 px-4 text-center">Total Buy-Ins</th>
+                    <th className="py-3 px-4 text-center">Avg Buy-Ins</th>
                     <th className="py-3 px-4 text-center">
                       Total Cash Out (Chips)
                     </th>
                     <th className="py-3 px-4 text-center">
-                      Net Profit/Loss (NIS)
+                      Avg Cash Out (Chips)
                     </th>
+                    <th className="py-3 px-4 text-center">Net P/L (NIS)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -247,7 +249,13 @@ export default function AnalyticsPage() {
                         {player.totalBuyInsCount}
                       </td>
                       <td className="py-3 px-4 text-center">
+                        {formatAvg(player.avgBuyIns)}
+                      </td>
+                      <td className="py-3 px-4 text-center">
                         {player.totalCashOutChips.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        {formatChips(player.avgCashOutChips)}
                       </td>
                       <td
                         className={`py-3 px-4 text-center font-semibold ${

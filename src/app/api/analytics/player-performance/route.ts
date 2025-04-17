@@ -12,6 +12,8 @@ interface PlayerPerformance {
   totalCashOutChips: number; // Aggregated cash-out in Chips
   netProfitLoss: number; // Calculated: totalCashOutAmount (NIS) - totalBuyInValue (NIS)
   eventsPlayed: number;
+  avgBuyIns: number; // NEW: Average buy-ins per event played
+  avgCashOutChips: number; // NEW: Average cash-out chips per event played
 }
 
 export async function GET() {
@@ -71,6 +73,8 @@ export async function GET() {
           totalCashOutChips: 0, // Store Chip value
           netProfitLoss: 0,
           eventsPlayed: 0,
+          avgBuyIns: 0, // Initialize new fields
+          avgCashOutChips: 0, // Initialize new fields
         });
       }
 
@@ -81,10 +85,15 @@ export async function GET() {
       currentPerf.eventsPlayed += 1; // Increment events played count
     }
 
-    // Calculate final NIS values and convert map to array
+    // Calculate final NIS values, averages, and convert map to array
     const performanceData = Array.from(performanceMap.values()).map((perf) => {
       perf.totalBuyInValue = perf.totalBuyInsCount * buyInValue; // NIS
       perf.netProfitLoss = perf.totalCashOutAmount - perf.totalBuyInValue; // NIS - NIS
+      // Calculate averages, handle division by zero
+      perf.avgBuyIns =
+        perf.eventsPlayed > 0 ? perf.totalBuyInsCount / perf.eventsPlayed : 0;
+      perf.avgCashOutChips =
+        perf.eventsPlayed > 0 ? perf.totalCashOutChips / perf.eventsPlayed : 0;
       return perf;
     });
 
