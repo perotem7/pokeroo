@@ -342,7 +342,6 @@ export default function AnalyticsPage() {
                     <th className="py-3 px-4 text-center">Host</th>
                     <th className="py-3 px-4 text-center">Players</th>
                     <th className="py-3 px-4 text-center">Total Pot (NIS)</th>
-                    <th className="py-3 px-4 text-center">Avg P/L (NIS)</th>
                     <th className="py-3 px-4 text-center">Biggest Winner</th>
                     <th className="py-3 px-4 text-center">Biggest Loser</th>
                   </tr>
@@ -366,17 +365,6 @@ export default function AnalyticsPage() {
                       </td>
                       <td className="py-3 px-4 text-center">
                         {formatCurrency(event.totalPotValue)}
-                      </td>
-                      <td
-                        className={`py-3 px-4 text-center ${
-                          event.averageProfitLoss === 0
-                            ? ""
-                            : event.averageProfitLoss > 0
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {formatCurrency(event.averageProfitLoss)}
                       </td>
                       <td className="py-3 px-4 text-center text-green-600">
                         {event.biggestWinner
