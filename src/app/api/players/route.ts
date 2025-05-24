@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getTenantPrisma } from "@/lib/prisma-tenant";
 
 // GET /api/players - Fetch players for the logged-in user
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,14 +12,18 @@ export async function GET(_request: Request) {
   }
 
   try {
+    const { prisma } = await getTenantPrisma();
+
     const players = await prisma.player.findMany({
       where: {
         createdById: session.user.id,
+        // tenantId automatically added by middleware
       },
       orderBy: {
-        createdAt: "asc", // Or name: 'asc'
+        createdAt: "asc",
       },
     });
+
     return NextResponse.json(players);
   } catch (error) {
     console.error("Error fetching players:", error);
@@ -34,7 +38,7 @@ export async function GET(_request: Request) {
 export async function POST(request: Request) {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!session?.user?.id || !session?.user?.tenantId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -48,17 +52,19 @@ export async function POST(request: Request) {
       );
     }
 
+    const { prisma } = await getTenantPrisma();
+
     const newPlayer = await prisma.player.create({
       data: {
         name: name.trim(),
         createdById: session.user.id,
+        tenantId: session.user.tenantId,
       },
     });
 
-    return NextResponse.json(newPlayer, { status: 201 }); // 201 Created
+    return NextResponse.json(newPlayer, { status: 201 });
   } catch (error) {
     console.error("Error creating player:", error);
-    // Handle potential duplicate name errors if needed in the future
     return NextResponse.json(
       { error: "Failed to create player" },
       { status: 500 }

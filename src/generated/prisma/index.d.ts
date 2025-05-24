@@ -14,6 +14,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model Tenant
+ * 
+ */
+export type Tenant = $Result.DefaultSelection<Prisma.$TenantPayload>
+/**
  * Model User
  * 
  */
@@ -46,11 +51,37 @@ export namespace $Enums {
 
 export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
 
+
+export const TenantPlan: {
+  FREE: 'FREE',
+  PROFESSIONAL: 'PROFESSIONAL',
+  ENTERPRISE: 'ENTERPRISE'
+};
+
+export type TenantPlan = (typeof TenantPlan)[keyof typeof TenantPlan]
+
+
+export const UserRole: {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+};
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
 }
 
 export type EventStatus = $Enums.EventStatus
 
 export const EventStatus: typeof $Enums.EventStatus
+
+export type TenantPlan = $Enums.TenantPlan
+
+export const TenantPlan: typeof $Enums.TenantPlan
+
+export type UserRole = $Enums.UserRole
+
+export const UserRole: typeof $Enums.UserRole
 
 /**
  * ##  Prisma Client ʲˢ
@@ -59,8 +90,8 @@ export const EventStatus: typeof $Enums.EventStatus
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Tenants
+ * const tenants = await prisma.tenant.findMany()
  * ```
  *
  *
@@ -80,8 +111,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more Tenants
+   * const tenants = await prisma.tenant.findMany()
    * ```
    *
    *
@@ -178,6 +209,16 @@ export class PrismaClient<
   }>>
 
       /**
+   * `prisma.tenant`: Exposes CRUD operations for the **Tenant** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tenants
+    * const tenants = await prisma.tenant.findMany()
+    * ```
+    */
+  get tenant(): Prisma.TenantDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
@@ -656,6 +697,7 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    Tenant: 'Tenant',
     User: 'User',
     Player: 'Player',
     PokerEvent: 'PokerEvent',
@@ -678,10 +720,84 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "player" | "pokerEvent" | "playerInEvent"
+      modelProps: "tenant" | "user" | "player" | "pokerEvent" | "playerInEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
+      Tenant: {
+        payload: Prisma.$TenantPayload<ExtArgs>
+        fields: Prisma.TenantFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TenantFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TenantFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          findFirst: {
+            args: Prisma.TenantFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TenantFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          findMany: {
+            args: Prisma.TenantFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
+          }
+          create: {
+            args: Prisma.TenantCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          createMany: {
+            args: Prisma.TenantCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TenantCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
+          }
+          delete: {
+            args: Prisma.TenantDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          update: {
+            args: Prisma.TenantUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          deleteMany: {
+            args: Prisma.TenantDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TenantUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TenantUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>[]
+          }
+          upsert: {
+            args: Prisma.TenantUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TenantPayload>
+          }
+          aggregate: {
+            args: Prisma.TenantAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTenant>
+          }
+          groupBy: {
+            args: Prisma.TenantGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TenantGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TenantCountArgs<ExtArgs>
+            result: $Utils.Optional<TenantCountAggregateOutputType> | number
+          }
+        }
+      }
       User: {
         payload: Prisma.$UserPayload<ExtArgs>
         fields: Prisma.UserFieldRefs
@@ -1062,6 +1178,7 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
+    tenant?: TenantOmit
     user?: UserOmit
     player?: PlayerOmit
     pokerEvent?: PokerEventOmit
@@ -1153,6 +1270,64 @@ export namespace Prisma {
   /**
    * Count Types
    */
+
+
+  /**
+   * Count Type TenantCountOutputType
+   */
+
+  export type TenantCountOutputType = {
+    users: number
+    players: number
+    pokerEvents: number
+    playerInEvents: number
+  }
+
+  export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | TenantCountOutputTypeCountUsersArgs
+    players?: boolean | TenantCountOutputTypeCountPlayersArgs
+    pokerEvents?: boolean | TenantCountOutputTypeCountPokerEventsArgs
+    playerInEvents?: boolean | TenantCountOutputTypeCountPlayerInEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TenantCountOutputType
+     */
+    select?: TenantCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountPlayersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlayerWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountPokerEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PokerEventWhereInput
+  }
+
+  /**
+   * TenantCountOutputType without action
+   */
+  export type TenantCountOutputTypeCountPlayerInEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlayerInEventWhereInput
+  }
 
 
   /**
@@ -1262,6 +1437,1208 @@ export namespace Prisma {
    */
 
   /**
+   * Model Tenant
+   */
+
+  export type AggregateTenant = {
+    _count: TenantCountAggregateOutputType | null
+    _min: TenantMinAggregateOutputType | null
+    _max: TenantMaxAggregateOutputType | null
+  }
+
+  export type TenantMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    subdomain: string | null
+    customDomain: string | null
+    plan: $Enums.TenantPlan | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TenantMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    subdomain: string | null
+    customDomain: string | null
+    plan: $Enums.TenantPlan | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TenantCountAggregateOutputType = {
+    id: number
+    name: number
+    subdomain: number
+    customDomain: number
+    plan: number
+    settings: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TenantMinAggregateInputType = {
+    id?: true
+    name?: true
+    subdomain?: true
+    customDomain?: true
+    plan?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TenantMaxAggregateInputType = {
+    id?: true
+    name?: true
+    subdomain?: true
+    customDomain?: true
+    plan?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TenantCountAggregateInputType = {
+    id?: true
+    name?: true
+    subdomain?: true
+    customDomain?: true
+    plan?: true
+    settings?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TenantAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tenant to aggregate.
+     */
+    where?: TenantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tenants to fetch.
+     */
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TenantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tenants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tenants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Tenants
+    **/
+    _count?: true | TenantCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TenantMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TenantMaxAggregateInputType
+  }
+
+  export type GetTenantAggregateType<T extends TenantAggregateArgs> = {
+        [P in keyof T & keyof AggregateTenant]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTenant[P]>
+      : GetScalarType<T[P], AggregateTenant[P]>
+  }
+
+
+
+
+  export type TenantGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TenantWhereInput
+    orderBy?: TenantOrderByWithAggregationInput | TenantOrderByWithAggregationInput[]
+    by: TenantScalarFieldEnum[] | TenantScalarFieldEnum
+    having?: TenantScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TenantCountAggregateInputType | true
+    _min?: TenantMinAggregateInputType
+    _max?: TenantMaxAggregateInputType
+  }
+
+  export type TenantGroupByOutputType = {
+    id: string
+    name: string
+    subdomain: string
+    customDomain: string | null
+    plan: $Enums.TenantPlan
+    settings: JsonValue | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: TenantCountAggregateOutputType | null
+    _min: TenantMinAggregateOutputType | null
+    _max: TenantMaxAggregateOutputType | null
+  }
+
+  type GetTenantGroupByPayload<T extends TenantGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TenantGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TenantGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TenantGroupByOutputType[P]>
+            : GetScalarType<T[P], TenantGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TenantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    subdomain?: boolean
+    customDomain?: boolean
+    plan?: boolean
+    settings?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    users?: boolean | Tenant$usersArgs<ExtArgs>
+    players?: boolean | Tenant$playersArgs<ExtArgs>
+    pokerEvents?: boolean | Tenant$pokerEventsArgs<ExtArgs>
+    playerInEvents?: boolean | Tenant$playerInEventsArgs<ExtArgs>
+    _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tenant"]>
+
+  export type TenantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    subdomain?: boolean
+    customDomain?: boolean
+    plan?: boolean
+    settings?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tenant"]>
+
+  export type TenantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    subdomain?: boolean
+    customDomain?: boolean
+    plan?: boolean
+    settings?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tenant"]>
+
+  export type TenantSelectScalar = {
+    id?: boolean
+    name?: boolean
+    subdomain?: boolean
+    customDomain?: boolean
+    plan?: boolean
+    settings?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "subdomain" | "customDomain" | "plan" | "settings" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
+  export type TenantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | Tenant$usersArgs<ExtArgs>
+    players?: boolean | Tenant$playersArgs<ExtArgs>
+    pokerEvents?: boolean | Tenant$pokerEventsArgs<ExtArgs>
+    playerInEvents?: boolean | Tenant$playerInEventsArgs<ExtArgs>
+    _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TenantIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Tenant"
+    objects: {
+      users: Prisma.$UserPayload<ExtArgs>[]
+      players: Prisma.$PlayerPayload<ExtArgs>[]
+      pokerEvents: Prisma.$PokerEventPayload<ExtArgs>[]
+      playerInEvents: Prisma.$PlayerInEventPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      subdomain: string
+      customDomain: string | null
+      plan: $Enums.TenantPlan
+      settings: Prisma.JsonValue | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tenant"]>
+    composites: {}
+  }
+
+  type TenantGetPayload<S extends boolean | null | undefined | TenantDefaultArgs> = $Result.GetResult<Prisma.$TenantPayload, S>
+
+  type TenantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TenantFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TenantCountAggregateInputType | true
+    }
+
+  export interface TenantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Tenant'], meta: { name: 'Tenant' } }
+    /**
+     * Find zero or one Tenant that matches the filter.
+     * @param {TenantFindUniqueArgs} args - Arguments to find a Tenant
+     * @example
+     * // Get one Tenant
+     * const tenant = await prisma.tenant.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TenantFindUniqueArgs>(args: SelectSubset<T, TenantFindUniqueArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Tenant that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TenantFindUniqueOrThrowArgs} args - Arguments to find a Tenant
+     * @example
+     * // Get one Tenant
+     * const tenant = await prisma.tenant.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TenantFindUniqueOrThrowArgs>(args: SelectSubset<T, TenantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Tenant that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantFindFirstArgs} args - Arguments to find a Tenant
+     * @example
+     * // Get one Tenant
+     * const tenant = await prisma.tenant.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TenantFindFirstArgs>(args?: SelectSubset<T, TenantFindFirstArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Tenant that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantFindFirstOrThrowArgs} args - Arguments to find a Tenant
+     * @example
+     * // Get one Tenant
+     * const tenant = await prisma.tenant.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TenantFindFirstOrThrowArgs>(args?: SelectSubset<T, TenantFindFirstOrThrowArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Tenants that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Tenants
+     * const tenants = await prisma.tenant.findMany()
+     * 
+     * // Get first 10 Tenants
+     * const tenants = await prisma.tenant.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tenantWithIdOnly = await prisma.tenant.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TenantFindManyArgs>(args?: SelectSubset<T, TenantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Tenant.
+     * @param {TenantCreateArgs} args - Arguments to create a Tenant.
+     * @example
+     * // Create one Tenant
+     * const Tenant = await prisma.tenant.create({
+     *   data: {
+     *     // ... data to create a Tenant
+     *   }
+     * })
+     * 
+     */
+    create<T extends TenantCreateArgs>(args: SelectSubset<T, TenantCreateArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Tenants.
+     * @param {TenantCreateManyArgs} args - Arguments to create many Tenants.
+     * @example
+     * // Create many Tenants
+     * const tenant = await prisma.tenant.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TenantCreateManyArgs>(args?: SelectSubset<T, TenantCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tenants and returns the data saved in the database.
+     * @param {TenantCreateManyAndReturnArgs} args - Arguments to create many Tenants.
+     * @example
+     * // Create many Tenants
+     * const tenant = await prisma.tenant.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tenants and only return the `id`
+     * const tenantWithIdOnly = await prisma.tenant.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TenantCreateManyAndReturnArgs>(args?: SelectSubset<T, TenantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Tenant.
+     * @param {TenantDeleteArgs} args - Arguments to delete one Tenant.
+     * @example
+     * // Delete one Tenant
+     * const Tenant = await prisma.tenant.delete({
+     *   where: {
+     *     // ... filter to delete one Tenant
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TenantDeleteArgs>(args: SelectSubset<T, TenantDeleteArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Tenant.
+     * @param {TenantUpdateArgs} args - Arguments to update one Tenant.
+     * @example
+     * // Update one Tenant
+     * const tenant = await prisma.tenant.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TenantUpdateArgs>(args: SelectSubset<T, TenantUpdateArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Tenants.
+     * @param {TenantDeleteManyArgs} args - Arguments to filter Tenants to delete.
+     * @example
+     * // Delete a few Tenants
+     * const { count } = await prisma.tenant.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TenantDeleteManyArgs>(args?: SelectSubset<T, TenantDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tenants.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Tenants
+     * const tenant = await prisma.tenant.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TenantUpdateManyArgs>(args: SelectSubset<T, TenantUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tenants and returns the data updated in the database.
+     * @param {TenantUpdateManyAndReturnArgs} args - Arguments to update many Tenants.
+     * @example
+     * // Update many Tenants
+     * const tenant = await prisma.tenant.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Tenants and only return the `id`
+     * const tenantWithIdOnly = await prisma.tenant.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TenantUpdateManyAndReturnArgs>(args: SelectSubset<T, TenantUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Tenant.
+     * @param {TenantUpsertArgs} args - Arguments to update or create a Tenant.
+     * @example
+     * // Update or create a Tenant
+     * const tenant = await prisma.tenant.upsert({
+     *   create: {
+     *     // ... data to create a Tenant
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Tenant we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TenantUpsertArgs>(args: SelectSubset<T, TenantUpsertArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Tenants.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantCountArgs} args - Arguments to filter Tenants to count.
+     * @example
+     * // Count the number of Tenants
+     * const count = await prisma.tenant.count({
+     *   where: {
+     *     // ... the filter for the Tenants we want to count
+     *   }
+     * })
+    **/
+    count<T extends TenantCountArgs>(
+      args?: Subset<T, TenantCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TenantCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Tenant.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TenantAggregateArgs>(args: Subset<T, TenantAggregateArgs>): Prisma.PrismaPromise<GetTenantAggregateType<T>>
+
+    /**
+     * Group by Tenant.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TenantGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TenantGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TenantGroupByArgs['orderBy'] }
+        : { orderBy?: TenantGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TenantGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTenantGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Tenant model
+   */
+  readonly fields: TenantFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Tenant.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TenantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    users<T extends Tenant$usersArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    players<T extends Tenant$playersArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$playersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pokerEvents<T extends Tenant$pokerEventsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$pokerEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PokerEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    playerInEvents<T extends Tenant$playerInEventsArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$playerInEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayerInEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Tenant model
+   */
+  interface TenantFieldRefs {
+    readonly id: FieldRef<"Tenant", 'String'>
+    readonly name: FieldRef<"Tenant", 'String'>
+    readonly subdomain: FieldRef<"Tenant", 'String'>
+    readonly customDomain: FieldRef<"Tenant", 'String'>
+    readonly plan: FieldRef<"Tenant", 'TenantPlan'>
+    readonly settings: FieldRef<"Tenant", 'Json'>
+    readonly isActive: FieldRef<"Tenant", 'Boolean'>
+    readonly createdAt: FieldRef<"Tenant", 'DateTime'>
+    readonly updatedAt: FieldRef<"Tenant", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Tenant findUnique
+   */
+  export type TenantFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenant to fetch.
+     */
+    where: TenantWhereUniqueInput
+  }
+
+  /**
+   * Tenant findUniqueOrThrow
+   */
+  export type TenantFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenant to fetch.
+     */
+    where: TenantWhereUniqueInput
+  }
+
+  /**
+   * Tenant findFirst
+   */
+  export type TenantFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenant to fetch.
+     */
+    where?: TenantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tenants to fetch.
+     */
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tenants.
+     */
+    cursor?: TenantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tenants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tenants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tenants.
+     */
+    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant findFirstOrThrow
+   */
+  export type TenantFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenant to fetch.
+     */
+    where?: TenantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tenants to fetch.
+     */
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tenants.
+     */
+    cursor?: TenantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tenants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tenants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tenants.
+     */
+    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant findMany
+   */
+  export type TenantFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter, which Tenants to fetch.
+     */
+    where?: TenantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tenants to fetch.
+     */
+    orderBy?: TenantOrderByWithRelationInput | TenantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Tenants.
+     */
+    cursor?: TenantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tenants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tenants.
+     */
+    skip?: number
+    distinct?: TenantScalarFieldEnum | TenantScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant create
+   */
+  export type TenantCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Tenant.
+     */
+    data: XOR<TenantCreateInput, TenantUncheckedCreateInput>
+  }
+
+  /**
+   * Tenant createMany
+   */
+  export type TenantCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Tenants.
+     */
+    data: TenantCreateManyInput | TenantCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Tenant createManyAndReturn
+   */
+  export type TenantCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * The data used to create many Tenants.
+     */
+    data: TenantCreateManyInput | TenantCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Tenant update
+   */
+  export type TenantUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Tenant.
+     */
+    data: XOR<TenantUpdateInput, TenantUncheckedUpdateInput>
+    /**
+     * Choose, which Tenant to update.
+     */
+    where: TenantWhereUniqueInput
+  }
+
+  /**
+   * Tenant updateMany
+   */
+  export type TenantUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Tenants.
+     */
+    data: XOR<TenantUpdateManyMutationInput, TenantUncheckedUpdateManyInput>
+    /**
+     * Filter which Tenants to update
+     */
+    where?: TenantWhereInput
+    /**
+     * Limit how many Tenants to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tenant updateManyAndReturn
+   */
+  export type TenantUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * The data used to update Tenants.
+     */
+    data: XOR<TenantUpdateManyMutationInput, TenantUncheckedUpdateManyInput>
+    /**
+     * Filter which Tenants to update
+     */
+    where?: TenantWhereInput
+    /**
+     * Limit how many Tenants to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tenant upsert
+   */
+  export type TenantUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Tenant to update in case it exists.
+     */
+    where: TenantWhereUniqueInput
+    /**
+     * In case the Tenant found by the `where` argument doesn't exist, create a new Tenant with this data.
+     */
+    create: XOR<TenantCreateInput, TenantUncheckedCreateInput>
+    /**
+     * In case the Tenant was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TenantUpdateInput, TenantUncheckedUpdateInput>
+  }
+
+  /**
+   * Tenant delete
+   */
+  export type TenantDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+    /**
+     * Filter which Tenant to delete.
+     */
+    where: TenantWhereUniqueInput
+  }
+
+  /**
+   * Tenant deleteMany
+   */
+  export type TenantDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tenants to delete
+     */
+    where?: TenantWhereInput
+    /**
+     * Limit how many Tenants to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tenant.users
+   */
+  export type Tenant$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.players
+   */
+  export type Tenant$playersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Player
+     */
+    select?: PlayerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Player
+     */
+    omit?: PlayerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayerInclude<ExtArgs> | null
+    where?: PlayerWhereInput
+    orderBy?: PlayerOrderByWithRelationInput | PlayerOrderByWithRelationInput[]
+    cursor?: PlayerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlayerScalarFieldEnum | PlayerScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.pokerEvents
+   */
+  export type Tenant$pokerEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PokerEvent
+     */
+    select?: PokerEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PokerEvent
+     */
+    omit?: PokerEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PokerEventInclude<ExtArgs> | null
+    where?: PokerEventWhereInput
+    orderBy?: PokerEventOrderByWithRelationInput | PokerEventOrderByWithRelationInput[]
+    cursor?: PokerEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PokerEventScalarFieldEnum | PokerEventScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant.playerInEvents
+   */
+  export type Tenant$playerInEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayerInEvent
+     */
+    select?: PlayerInEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayerInEvent
+     */
+    omit?: PlayerInEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayerInEventInclude<ExtArgs> | null
+    where?: PlayerInEventWhereInput
+    orderBy?: PlayerInEventOrderByWithRelationInput | PlayerInEventOrderByWithRelationInput[]
+    cursor?: PlayerInEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlayerInEventScalarFieldEnum | PlayerInEventScalarFieldEnum[]
+  }
+
+  /**
+   * Tenant without action
+   */
+  export type TenantDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tenant
+     */
+    select?: TenantSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tenant
+     */
+    omit?: TenantOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TenantInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model User
    */
 
@@ -1274,7 +2651,11 @@ export namespace Prisma {
   export type UserMinAggregateOutputType = {
     id: string | null
     username: string | null
+    email: string | null
     passwordHash: string | null
+    role: $Enums.UserRole | null
+    tenantId: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1282,7 +2663,11 @@ export namespace Prisma {
   export type UserMaxAggregateOutputType = {
     id: string | null
     username: string | null
+    email: string | null
     passwordHash: string | null
+    role: $Enums.UserRole | null
+    tenantId: string | null
+    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1290,7 +2675,11 @@ export namespace Prisma {
   export type UserCountAggregateOutputType = {
     id: number
     username: number
+    email: number
     passwordHash: number
+    role: number
+    tenantId: number
+    isActive: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1300,7 +2689,11 @@ export namespace Prisma {
   export type UserMinAggregateInputType = {
     id?: true
     username?: true
+    email?: true
     passwordHash?: true
+    role?: true
+    tenantId?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1308,7 +2701,11 @@ export namespace Prisma {
   export type UserMaxAggregateInputType = {
     id?: true
     username?: true
+    email?: true
     passwordHash?: true
+    role?: true
+    tenantId?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1316,7 +2713,11 @@ export namespace Prisma {
   export type UserCountAggregateInputType = {
     id?: true
     username?: true
+    email?: true
     passwordHash?: true
+    role?: true
+    tenantId?: true
+    isActive?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1397,7 +2798,11 @@ export namespace Prisma {
   export type UserGroupByOutputType = {
     id: string
     username: string
+    email: string | null
     passwordHash: string
+    role: $Enums.UserRole
+    tenantId: string
+    isActive: boolean
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1422,9 +2827,14 @@ export namespace Prisma {
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     username?: boolean
+    email?: boolean
     passwordHash?: boolean
+    role?: boolean
+    tenantId?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     players?: boolean | User$playersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -1432,44 +2842,68 @@ export namespace Prisma {
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     username?: boolean
+    email?: boolean
     passwordHash?: boolean
+    role?: boolean
+    tenantId?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     username?: boolean
+    email?: boolean
     passwordHash?: boolean
+    role?: boolean
+    tenantId?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
     username?: boolean
+    email?: boolean
     passwordHash?: boolean
+    role?: boolean
+    tenantId?: boolean
+    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "passwordHash" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "passwordHash" | "role" | "tenantId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     players?: boolean | User$playersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
       players: Prisma.$PlayerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       username: string
+      email: string | null
       passwordHash: string
+      role: $Enums.UserRole
+      tenantId: string
+      isActive: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -1866,6 +3300,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     players<T extends User$playersArgs<ExtArgs> = {}>(args?: Subset<T, User$playersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1898,7 +3333,11 @@ export namespace Prisma {
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
     readonly username: FieldRef<"User", 'String'>
+    readonly email: FieldRef<"User", 'String'>
     readonly passwordHash: FieldRef<"User", 'String'>
+    readonly role: FieldRef<"User", 'UserRole'>
+    readonly tenantId: FieldRef<"User", 'String'>
+    readonly isActive: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -2150,6 +3589,10 @@ export namespace Prisma {
      */
     data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2220,6 +3663,10 @@ export namespace Prisma {
      * Limit how many Users to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2344,25 +3791,28 @@ export namespace Prisma {
   export type PlayerMinAggregateOutputType = {
     id: string | null
     name: string | null
+    tenantId: string | null
+    createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    createdById: string | null
   }
 
   export type PlayerMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    tenantId: string | null
+    createdById: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    createdById: string | null
   }
 
   export type PlayerCountAggregateOutputType = {
     id: number
     name: number
+    tenantId: number
+    createdById: number
     createdAt: number
     updatedAt: number
-    createdById: number
     _all: number
   }
 
@@ -2370,25 +3820,28 @@ export namespace Prisma {
   export type PlayerMinAggregateInputType = {
     id?: true
     name?: true
+    tenantId?: true
+    createdById?: true
     createdAt?: true
     updatedAt?: true
-    createdById?: true
   }
 
   export type PlayerMaxAggregateInputType = {
     id?: true
     name?: true
+    tenantId?: true
+    createdById?: true
     createdAt?: true
     updatedAt?: true
-    createdById?: true
   }
 
   export type PlayerCountAggregateInputType = {
     id?: true
     name?: true
+    tenantId?: true
+    createdById?: true
     createdAt?: true
     updatedAt?: true
-    createdById?: true
     _all?: true
   }
 
@@ -2467,9 +3920,10 @@ export namespace Prisma {
   export type PlayerGroupByOutputType = {
     id: string
     name: string
+    tenantId: string
+    createdById: string
     createdAt: Date
     updatedAt: Date
-    createdById: string
     _count: PlayerCountAggregateOutputType | null
     _min: PlayerMinAggregateOutputType | null
     _max: PlayerMaxAggregateOutputType | null
@@ -2492,9 +3946,11 @@ export namespace Prisma {
   export type PlayerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    tenantId?: boolean
+    createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    createdById?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     pokerEvents?: boolean | Player$pokerEventsArgs<ExtArgs>
     hostedEvents?: boolean | Player$hostedEventsArgs<ExtArgs>
@@ -2504,46 +3960,55 @@ export namespace Prisma {
   export type PlayerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    tenantId?: boolean
+    createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    createdById?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["player"]>
 
   export type PlayerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    tenantId?: boolean
+    createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    createdById?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["player"]>
 
   export type PlayerSelectScalar = {
     id?: boolean
     name?: boolean
+    tenantId?: boolean
+    createdById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    createdById?: boolean
   }
 
-  export type PlayerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "createdById", ExtArgs["result"]["player"]>
+  export type PlayerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "tenantId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["player"]>
   export type PlayerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     pokerEvents?: boolean | Player$pokerEventsArgs<ExtArgs>
     hostedEvents?: boolean | Player$hostedEventsArgs<ExtArgs>
     _count?: boolean | PlayerCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PlayerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type PlayerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $PlayerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Player"
     objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
       createdBy: Prisma.$UserPayload<ExtArgs>
       pokerEvents: Prisma.$PlayerInEventPayload<ExtArgs>[]
       hostedEvents: Prisma.$PokerEventPayload<ExtArgs>[]
@@ -2551,9 +4016,10 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      tenantId: string
+      createdById: string
       createdAt: Date
       updatedAt: Date
-      createdById: string
     }, ExtArgs["result"]["player"]>
     composites: {}
   }
@@ -2948,6 +4414,7 @@ export namespace Prisma {
    */
   export interface Prisma__PlayerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     pokerEvents<T extends Player$pokerEventsArgs<ExtArgs> = {}>(args?: Subset<T, Player$pokerEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayerInEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     hostedEvents<T extends Player$hostedEventsArgs<ExtArgs> = {}>(args?: Subset<T, Player$hostedEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PokerEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2982,9 +4449,10 @@ export namespace Prisma {
   interface PlayerFieldRefs {
     readonly id: FieldRef<"Player", 'String'>
     readonly name: FieldRef<"Player", 'String'>
+    readonly tenantId: FieldRef<"Player", 'String'>
+    readonly createdById: FieldRef<"Player", 'String'>
     readonly createdAt: FieldRef<"Player", 'DateTime'>
     readonly updatedAt: FieldRef<"Player", 'DateTime'>
-    readonly createdById: FieldRef<"Player", 'String'>
   }
     
 
@@ -3461,27 +4929,30 @@ export namespace Prisma {
     id: string | null
     date: Date | null
     status: $Enums.EventStatus | null
+    tenantId: string | null
+    hostId: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    hostId: string | null
   }
 
   export type PokerEventMaxAggregateOutputType = {
     id: string | null
     date: Date | null
     status: $Enums.EventStatus | null
+    tenantId: string | null
+    hostId: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    hostId: string | null
   }
 
   export type PokerEventCountAggregateOutputType = {
     id: number
     date: number
     status: number
+    tenantId: number
+    hostId: number
     createdAt: number
     updatedAt: number
-    hostId: number
     _all: number
   }
 
@@ -3490,27 +4961,30 @@ export namespace Prisma {
     id?: true
     date?: true
     status?: true
+    tenantId?: true
+    hostId?: true
     createdAt?: true
     updatedAt?: true
-    hostId?: true
   }
 
   export type PokerEventMaxAggregateInputType = {
     id?: true
     date?: true
     status?: true
+    tenantId?: true
+    hostId?: true
     createdAt?: true
     updatedAt?: true
-    hostId?: true
   }
 
   export type PokerEventCountAggregateInputType = {
     id?: true
     date?: true
     status?: true
+    tenantId?: true
+    hostId?: true
     createdAt?: true
     updatedAt?: true
-    hostId?: true
     _all?: true
   }
 
@@ -3590,9 +5064,10 @@ export namespace Prisma {
     id: string
     date: Date
     status: $Enums.EventStatus
+    tenantId: string
+    hostId: string
     createdAt: Date
     updatedAt: Date
-    hostId: string
     _count: PokerEventCountAggregateOutputType | null
     _min: PokerEventMinAggregateOutputType | null
     _max: PokerEventMaxAggregateOutputType | null
@@ -3616,9 +5091,11 @@ export namespace Prisma {
     id?: boolean
     date?: boolean
     status?: boolean
+    tenantId?: boolean
+    hostId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    hostId?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     host?: boolean | PlayerDefaultArgs<ExtArgs>
     players?: boolean | PokerEvent$playersArgs<ExtArgs>
     _count?: boolean | PokerEventCountOutputTypeDefaultArgs<ExtArgs>
@@ -3628,9 +5105,11 @@ export namespace Prisma {
     id?: boolean
     date?: boolean
     status?: boolean
+    tenantId?: boolean
+    hostId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    hostId?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     host?: boolean | PlayerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pokerEvent"]>
 
@@ -3638,9 +5117,11 @@ export namespace Prisma {
     id?: boolean
     date?: boolean
     status?: boolean
+    tenantId?: boolean
+    hostId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    hostId?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     host?: boolean | PlayerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pokerEvent"]>
 
@@ -3648,27 +5129,32 @@ export namespace Prisma {
     id?: boolean
     date?: boolean
     status?: boolean
+    tenantId?: boolean
+    hostId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    hostId?: boolean
   }
 
-  export type PokerEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date" | "status" | "createdAt" | "updatedAt" | "hostId", ExtArgs["result"]["pokerEvent"]>
+  export type PokerEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date" | "status" | "tenantId" | "hostId" | "createdAt" | "updatedAt", ExtArgs["result"]["pokerEvent"]>
   export type PokerEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     host?: boolean | PlayerDefaultArgs<ExtArgs>
     players?: boolean | PokerEvent$playersArgs<ExtArgs>
     _count?: boolean | PokerEventCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PokerEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     host?: boolean | PlayerDefaultArgs<ExtArgs>
   }
   export type PokerEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     host?: boolean | PlayerDefaultArgs<ExtArgs>
   }
 
   export type $PokerEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PokerEvent"
     objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
       host: Prisma.$PlayerPayload<ExtArgs>
       players: Prisma.$PlayerInEventPayload<ExtArgs>[]
     }
@@ -3676,9 +5162,10 @@ export namespace Prisma {
       id: string
       date: Date
       status: $Enums.EventStatus
+      tenantId: string
+      hostId: string
       createdAt: Date
       updatedAt: Date
-      hostId: string
     }, ExtArgs["result"]["pokerEvent"]>
     composites: {}
   }
@@ -4073,6 +5560,7 @@ export namespace Prisma {
    */
   export interface Prisma__PokerEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     host<T extends PlayerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlayerDefaultArgs<ExtArgs>>): Prisma__PlayerClient<$Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     players<T extends PokerEvent$playersArgs<ExtArgs> = {}>(args?: Subset<T, PokerEvent$playersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayerInEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -4107,9 +5595,10 @@ export namespace Prisma {
     readonly id: FieldRef<"PokerEvent", 'String'>
     readonly date: FieldRef<"PokerEvent", 'DateTime'>
     readonly status: FieldRef<"PokerEvent", 'EventStatus'>
+    readonly tenantId: FieldRef<"PokerEvent", 'String'>
+    readonly hostId: FieldRef<"PokerEvent", 'String'>
     readonly createdAt: FieldRef<"PokerEvent", 'DateTime'>
     readonly updatedAt: FieldRef<"PokerEvent", 'DateTime'>
-    readonly hostId: FieldRef<"PokerEvent", 'String'>
   }
     
 
@@ -4574,30 +6063,33 @@ export namespace Prisma {
     id: string | null
     buyIns: number | null
     cashOutAmount: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    tenantId: string | null
     eventId: string | null
     playerId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type PlayerInEventMaxAggregateOutputType = {
     id: string | null
     buyIns: number | null
     cashOutAmount: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    tenantId: string | null
     eventId: string | null
     playerId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type PlayerInEventCountAggregateOutputType = {
     id: number
     buyIns: number
     cashOutAmount: number
-    createdAt: number
-    updatedAt: number
+    tenantId: number
     eventId: number
     playerId: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -4616,30 +6108,33 @@ export namespace Prisma {
     id?: true
     buyIns?: true
     cashOutAmount?: true
-    createdAt?: true
-    updatedAt?: true
+    tenantId?: true
     eventId?: true
     playerId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type PlayerInEventMaxAggregateInputType = {
     id?: true
     buyIns?: true
     cashOutAmount?: true
-    createdAt?: true
-    updatedAt?: true
+    tenantId?: true
     eventId?: true
     playerId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type PlayerInEventCountAggregateInputType = {
     id?: true
     buyIns?: true
     cashOutAmount?: true
-    createdAt?: true
-    updatedAt?: true
+    tenantId?: true
     eventId?: true
     playerId?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -4733,10 +6228,11 @@ export namespace Prisma {
     id: string
     buyIns: number
     cashOutAmount: number | null
-    createdAt: Date
-    updatedAt: Date
+    tenantId: string
     eventId: string
     playerId: string
+    createdAt: Date
+    updatedAt: Date
     _count: PlayerInEventCountAggregateOutputType | null
     _avg: PlayerInEventAvgAggregateOutputType | null
     _sum: PlayerInEventSumAggregateOutputType | null
@@ -4762,10 +6258,12 @@ export namespace Prisma {
     id?: boolean
     buyIns?: boolean
     cashOutAmount?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    tenantId?: boolean
     eventId?: boolean
     playerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     event?: boolean | PokerEventDefaultArgs<ExtArgs>
     player?: boolean | PlayerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["playerInEvent"]>
@@ -4774,10 +6272,12 @@ export namespace Prisma {
     id?: boolean
     buyIns?: boolean
     cashOutAmount?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    tenantId?: boolean
     eventId?: boolean
     playerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     event?: boolean | PokerEventDefaultArgs<ExtArgs>
     player?: boolean | PlayerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["playerInEvent"]>
@@ -4786,10 +6286,12 @@ export namespace Prisma {
     id?: boolean
     buyIns?: boolean
     cashOutAmount?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    tenantId?: boolean
     eventId?: boolean
     playerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     event?: boolean | PokerEventDefaultArgs<ExtArgs>
     player?: boolean | PlayerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["playerInEvent"]>
@@ -4798,22 +6300,26 @@ export namespace Prisma {
     id?: boolean
     buyIns?: boolean
     cashOutAmount?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    tenantId?: boolean
     eventId?: boolean
     playerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type PlayerInEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "buyIns" | "cashOutAmount" | "createdAt" | "updatedAt" | "eventId" | "playerId", ExtArgs["result"]["playerInEvent"]>
+  export type PlayerInEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "buyIns" | "cashOutAmount" | "tenantId" | "eventId" | "playerId" | "createdAt" | "updatedAt", ExtArgs["result"]["playerInEvent"]>
   export type PlayerInEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     event?: boolean | PokerEventDefaultArgs<ExtArgs>
     player?: boolean | PlayerDefaultArgs<ExtArgs>
   }
   export type PlayerInEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     event?: boolean | PokerEventDefaultArgs<ExtArgs>
     player?: boolean | PlayerDefaultArgs<ExtArgs>
   }
   export type PlayerInEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tenant?: boolean | TenantDefaultArgs<ExtArgs>
     event?: boolean | PokerEventDefaultArgs<ExtArgs>
     player?: boolean | PlayerDefaultArgs<ExtArgs>
   }
@@ -4821,6 +6327,7 @@ export namespace Prisma {
   export type $PlayerInEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PlayerInEvent"
     objects: {
+      tenant: Prisma.$TenantPayload<ExtArgs>
       event: Prisma.$PokerEventPayload<ExtArgs>
       player: Prisma.$PlayerPayload<ExtArgs>
     }
@@ -4828,10 +6335,11 @@ export namespace Prisma {
       id: string
       buyIns: number
       cashOutAmount: number | null
-      createdAt: Date
-      updatedAt: Date
+      tenantId: string
       eventId: string
       playerId: string
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["playerInEvent"]>
     composites: {}
   }
@@ -5226,6 +6734,7 @@ export namespace Prisma {
    */
   export interface Prisma__PlayerInEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    tenant<T extends TenantDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TenantDefaultArgs<ExtArgs>>): Prisma__TenantClient<$Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     event<T extends PokerEventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PokerEventDefaultArgs<ExtArgs>>): Prisma__PokerEventClient<$Result.GetResult<Prisma.$PokerEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     player<T extends PlayerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlayerDefaultArgs<ExtArgs>>): Prisma__PlayerClient<$Result.GetResult<Prisma.$PlayerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -5260,10 +6769,11 @@ export namespace Prisma {
     readonly id: FieldRef<"PlayerInEvent", 'String'>
     readonly buyIns: FieldRef<"PlayerInEvent", 'Int'>
     readonly cashOutAmount: FieldRef<"PlayerInEvent", 'Int'>
-    readonly createdAt: FieldRef<"PlayerInEvent", 'DateTime'>
-    readonly updatedAt: FieldRef<"PlayerInEvent", 'DateTime'>
+    readonly tenantId: FieldRef<"PlayerInEvent", 'String'>
     readonly eventId: FieldRef<"PlayerInEvent", 'String'>
     readonly playerId: FieldRef<"PlayerInEvent", 'String'>
+    readonly createdAt: FieldRef<"PlayerInEvent", 'DateTime'>
+    readonly updatedAt: FieldRef<"PlayerInEvent", 'DateTime'>
   }
     
 
@@ -5692,10 +7202,29 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const TenantScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    subdomain: 'subdomain',
+    customDomain: 'customDomain',
+    plan: 'plan',
+    settings: 'settings',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
+
+
   export const UserScalarFieldEnum: {
     id: 'id',
     username: 'username',
+    email: 'email',
     passwordHash: 'passwordHash',
+    role: 'role',
+    tenantId: 'tenantId',
+    isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -5706,9 +7235,10 @@ export namespace Prisma {
   export const PlayerScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    tenantId: 'tenantId',
+    createdById: 'createdById',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    createdById: 'createdById'
+    updatedAt: 'updatedAt'
   };
 
   export type PlayerScalarFieldEnum = (typeof PlayerScalarFieldEnum)[keyof typeof PlayerScalarFieldEnum]
@@ -5718,9 +7248,10 @@ export namespace Prisma {
     id: 'id',
     date: 'date',
     status: 'status',
+    tenantId: 'tenantId',
+    hostId: 'hostId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    hostId: 'hostId'
+    updatedAt: 'updatedAt'
   };
 
   export type PokerEventScalarFieldEnum = (typeof PokerEventScalarFieldEnum)[keyof typeof PokerEventScalarFieldEnum]
@@ -5730,10 +7261,11 @@ export namespace Prisma {
     id: 'id',
     buyIns: 'buyIns',
     cashOutAmount: 'cashOutAmount',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
+    tenantId: 'tenantId',
     eventId: 'eventId',
-    playerId: 'playerId'
+    playerId: 'playerId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type PlayerInEventScalarFieldEnum = (typeof PlayerInEventScalarFieldEnum)[keyof typeof PlayerInEventScalarFieldEnum]
@@ -5747,12 +7279,29 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   export const NullsOrder: {
@@ -5783,6 +7332,41 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TenantPlan'
+   */
+  export type EnumTenantPlanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TenantPlan'>
+    
+
+
+  /**
+   * Reference to a field of type 'TenantPlan[]'
+   */
+  export type ListEnumTenantPlanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TenantPlan[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -5793,6 +7377,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRole'
+   */
+  export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRole[]'
+   */
+  export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
     
 
 
@@ -5841,43 +7439,148 @@ export namespace Prisma {
    */
 
 
+  export type TenantWhereInput = {
+    AND?: TenantWhereInput | TenantWhereInput[]
+    OR?: TenantWhereInput[]
+    NOT?: TenantWhereInput | TenantWhereInput[]
+    id?: StringFilter<"Tenant"> | string
+    name?: StringFilter<"Tenant"> | string
+    subdomain?: StringFilter<"Tenant"> | string
+    customDomain?: StringNullableFilter<"Tenant"> | string | null
+    plan?: EnumTenantPlanFilter<"Tenant"> | $Enums.TenantPlan
+    settings?: JsonNullableFilter<"Tenant">
+    isActive?: BoolFilter<"Tenant"> | boolean
+    createdAt?: DateTimeFilter<"Tenant"> | Date | string
+    updatedAt?: DateTimeFilter<"Tenant"> | Date | string
+    users?: UserListRelationFilter
+    players?: PlayerListRelationFilter
+    pokerEvents?: PokerEventListRelationFilter
+    playerInEvents?: PlayerInEventListRelationFilter
+  }
+
+  export type TenantOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    subdomain?: SortOrder
+    customDomain?: SortOrderInput | SortOrder
+    plan?: SortOrder
+    settings?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    users?: UserOrderByRelationAggregateInput
+    players?: PlayerOrderByRelationAggregateInput
+    pokerEvents?: PokerEventOrderByRelationAggregateInput
+    playerInEvents?: PlayerInEventOrderByRelationAggregateInput
+  }
+
+  export type TenantWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    subdomain?: string
+    customDomain?: string
+    AND?: TenantWhereInput | TenantWhereInput[]
+    OR?: TenantWhereInput[]
+    NOT?: TenantWhereInput | TenantWhereInput[]
+    name?: StringFilter<"Tenant"> | string
+    plan?: EnumTenantPlanFilter<"Tenant"> | $Enums.TenantPlan
+    settings?: JsonNullableFilter<"Tenant">
+    isActive?: BoolFilter<"Tenant"> | boolean
+    createdAt?: DateTimeFilter<"Tenant"> | Date | string
+    updatedAt?: DateTimeFilter<"Tenant"> | Date | string
+    users?: UserListRelationFilter
+    players?: PlayerListRelationFilter
+    pokerEvents?: PokerEventListRelationFilter
+    playerInEvents?: PlayerInEventListRelationFilter
+  }, "id" | "subdomain" | "customDomain">
+
+  export type TenantOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    subdomain?: SortOrder
+    customDomain?: SortOrderInput | SortOrder
+    plan?: SortOrder
+    settings?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TenantCountOrderByAggregateInput
+    _max?: TenantMaxOrderByAggregateInput
+    _min?: TenantMinOrderByAggregateInput
+  }
+
+  export type TenantScalarWhereWithAggregatesInput = {
+    AND?: TenantScalarWhereWithAggregatesInput | TenantScalarWhereWithAggregatesInput[]
+    OR?: TenantScalarWhereWithAggregatesInput[]
+    NOT?: TenantScalarWhereWithAggregatesInput | TenantScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Tenant"> | string
+    name?: StringWithAggregatesFilter<"Tenant"> | string
+    subdomain?: StringWithAggregatesFilter<"Tenant"> | string
+    customDomain?: StringNullableWithAggregatesFilter<"Tenant"> | string | null
+    plan?: EnumTenantPlanWithAggregatesFilter<"Tenant"> | $Enums.TenantPlan
+    settings?: JsonNullableWithAggregatesFilter<"Tenant">
+    isActive?: BoolWithAggregatesFilter<"Tenant"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Tenant"> | Date | string
+  }
+
   export type UserWhereInput = {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
     username?: StringFilter<"User"> | string
+    email?: StringNullableFilter<"User"> | string | null
     passwordHash?: StringFilter<"User"> | string
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    tenantId?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     players?: PlayerListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     username?: SortOrder
+    email?: SortOrderInput | SortOrder
     passwordHash?: SortOrder
+    role?: SortOrder
+    tenantId?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
     players?: PlayerOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    username?: string
+    username_tenantId?: UserUsernameTenantIdCompoundUniqueInput
+    email_tenantId?: UserEmailTenantIdCompoundUniqueInput
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
+    username?: StringFilter<"User"> | string
+    email?: StringNullableFilter<"User"> | string | null
     passwordHash?: StringFilter<"User"> | string
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    tenantId?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     players?: PlayerListRelationFilter
-  }, "id" | "username">
+  }, "id" | "username_tenantId" | "email_tenantId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     username?: SortOrder
+    email?: SortOrderInput | SortOrder
     passwordHash?: SortOrder
+    role?: SortOrder
+    tenantId?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -5891,7 +7594,11 @@ export namespace Prisma {
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
     username?: StringWithAggregatesFilter<"User"> | string
+    email?: StringNullableWithAggregatesFilter<"User"> | string | null
     passwordHash?: StringWithAggregatesFilter<"User"> | string
+    role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    tenantId?: StringWithAggregatesFilter<"User"> | string
+    isActive?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -5902,9 +7609,11 @@ export namespace Prisma {
     NOT?: PlayerWhereInput | PlayerWhereInput[]
     id?: StringFilter<"Player"> | string
     name?: StringFilter<"Player"> | string
+    tenantId?: StringFilter<"Player"> | string
+    createdById?: StringFilter<"Player"> | string
     createdAt?: DateTimeFilter<"Player"> | Date | string
     updatedAt?: DateTimeFilter<"Player"> | Date | string
-    createdById?: StringFilter<"Player"> | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     pokerEvents?: PlayerInEventListRelationFilter
     hostedEvents?: PokerEventListRelationFilter
@@ -5913,9 +7622,11 @@ export namespace Prisma {
   export type PlayerOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    createdById?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
     createdBy?: UserOrderByWithRelationInput
     pokerEvents?: PlayerInEventOrderByRelationAggregateInput
     hostedEvents?: PokerEventOrderByRelationAggregateInput
@@ -5927,9 +7638,11 @@ export namespace Prisma {
     OR?: PlayerWhereInput[]
     NOT?: PlayerWhereInput | PlayerWhereInput[]
     name?: StringFilter<"Player"> | string
+    tenantId?: StringFilter<"Player"> | string
+    createdById?: StringFilter<"Player"> | string
     createdAt?: DateTimeFilter<"Player"> | Date | string
     updatedAt?: DateTimeFilter<"Player"> | Date | string
-    createdById?: StringFilter<"Player"> | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     pokerEvents?: PlayerInEventListRelationFilter
     hostedEvents?: PokerEventListRelationFilter
@@ -5938,9 +7651,10 @@ export namespace Prisma {
   export type PlayerOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    createdById?: SortOrder
     _count?: PlayerCountOrderByAggregateInput
     _max?: PlayerMaxOrderByAggregateInput
     _min?: PlayerMinOrderByAggregateInput
@@ -5952,9 +7666,10 @@ export namespace Prisma {
     NOT?: PlayerScalarWhereWithAggregatesInput | PlayerScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Player"> | string
     name?: StringWithAggregatesFilter<"Player"> | string
+    tenantId?: StringWithAggregatesFilter<"Player"> | string
+    createdById?: StringWithAggregatesFilter<"Player"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Player"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Player"> | Date | string
-    createdById?: StringWithAggregatesFilter<"Player"> | string
   }
 
   export type PokerEventWhereInput = {
@@ -5964,9 +7679,11 @@ export namespace Prisma {
     id?: StringFilter<"PokerEvent"> | string
     date?: DateTimeFilter<"PokerEvent"> | Date | string
     status?: EnumEventStatusFilter<"PokerEvent"> | $Enums.EventStatus
+    tenantId?: StringFilter<"PokerEvent"> | string
+    hostId?: StringFilter<"PokerEvent"> | string
     createdAt?: DateTimeFilter<"PokerEvent"> | Date | string
     updatedAt?: DateTimeFilter<"PokerEvent"> | Date | string
-    hostId?: StringFilter<"PokerEvent"> | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     host?: XOR<PlayerScalarRelationFilter, PlayerWhereInput>
     players?: PlayerInEventListRelationFilter
   }
@@ -5975,9 +7692,11 @@ export namespace Prisma {
     id?: SortOrder
     date?: SortOrder
     status?: SortOrder
+    tenantId?: SortOrder
+    hostId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    hostId?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
     host?: PlayerOrderByWithRelationInput
     players?: PlayerInEventOrderByRelationAggregateInput
   }
@@ -5989,9 +7708,11 @@ export namespace Prisma {
     NOT?: PokerEventWhereInput | PokerEventWhereInput[]
     date?: DateTimeFilter<"PokerEvent"> | Date | string
     status?: EnumEventStatusFilter<"PokerEvent"> | $Enums.EventStatus
+    tenantId?: StringFilter<"PokerEvent"> | string
+    hostId?: StringFilter<"PokerEvent"> | string
     createdAt?: DateTimeFilter<"PokerEvent"> | Date | string
     updatedAt?: DateTimeFilter<"PokerEvent"> | Date | string
-    hostId?: StringFilter<"PokerEvent"> | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     host?: XOR<PlayerScalarRelationFilter, PlayerWhereInput>
     players?: PlayerInEventListRelationFilter
   }, "id">
@@ -6000,9 +7721,10 @@ export namespace Prisma {
     id?: SortOrder
     date?: SortOrder
     status?: SortOrder
+    tenantId?: SortOrder
+    hostId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    hostId?: SortOrder
     _count?: PokerEventCountOrderByAggregateInput
     _max?: PokerEventMaxOrderByAggregateInput
     _min?: PokerEventMinOrderByAggregateInput
@@ -6015,9 +7737,10 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"PokerEvent"> | string
     date?: DateTimeWithAggregatesFilter<"PokerEvent"> | Date | string
     status?: EnumEventStatusWithAggregatesFilter<"PokerEvent"> | $Enums.EventStatus
+    tenantId?: StringWithAggregatesFilter<"PokerEvent"> | string
+    hostId?: StringWithAggregatesFilter<"PokerEvent"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PokerEvent"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PokerEvent"> | Date | string
-    hostId?: StringWithAggregatesFilter<"PokerEvent"> | string
   }
 
   export type PlayerInEventWhereInput = {
@@ -6027,10 +7750,12 @@ export namespace Prisma {
     id?: StringFilter<"PlayerInEvent"> | string
     buyIns?: IntFilter<"PlayerInEvent"> | number
     cashOutAmount?: IntNullableFilter<"PlayerInEvent"> | number | null
-    createdAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
-    updatedAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
+    tenantId?: StringFilter<"PlayerInEvent"> | string
     eventId?: StringFilter<"PlayerInEvent"> | string
     playerId?: StringFilter<"PlayerInEvent"> | string
+    createdAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     event?: XOR<PokerEventScalarRelationFilter, PokerEventWhereInput>
     player?: XOR<PlayerScalarRelationFilter, PlayerWhereInput>
   }
@@ -6039,10 +7764,12 @@ export namespace Prisma {
     id?: SortOrder
     buyIns?: SortOrder
     cashOutAmount?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    tenantId?: SortOrder
     eventId?: SortOrder
     playerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    tenant?: TenantOrderByWithRelationInput
     event?: PokerEventOrderByWithRelationInput
     player?: PlayerOrderByWithRelationInput
   }
@@ -6055,10 +7782,12 @@ export namespace Prisma {
     NOT?: PlayerInEventWhereInput | PlayerInEventWhereInput[]
     buyIns?: IntFilter<"PlayerInEvent"> | number
     cashOutAmount?: IntNullableFilter<"PlayerInEvent"> | number | null
-    createdAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
-    updatedAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
+    tenantId?: StringFilter<"PlayerInEvent"> | string
     eventId?: StringFilter<"PlayerInEvent"> | string
     playerId?: StringFilter<"PlayerInEvent"> | string
+    createdAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
+    tenant?: XOR<TenantScalarRelationFilter, TenantWhereInput>
     event?: XOR<PokerEventScalarRelationFilter, PokerEventWhereInput>
     player?: XOR<PlayerScalarRelationFilter, PlayerWhereInput>
   }, "id" | "eventId_playerId">
@@ -6067,10 +7796,11 @@ export namespace Prisma {
     id?: SortOrder
     buyIns?: SortOrder
     cashOutAmount?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    tenantId?: SortOrder
     eventId?: SortOrder
     playerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: PlayerInEventCountOrderByAggregateInput
     _avg?: PlayerInEventAvgOrderByAggregateInput
     _max?: PlayerInEventMaxOrderByAggregateInput
@@ -6085,25 +7815,134 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"PlayerInEvent"> | string
     buyIns?: IntWithAggregatesFilter<"PlayerInEvent"> | number
     cashOutAmount?: IntNullableWithAggregatesFilter<"PlayerInEvent"> | number | null
-    createdAt?: DateTimeWithAggregatesFilter<"PlayerInEvent"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"PlayerInEvent"> | Date | string
+    tenantId?: StringWithAggregatesFilter<"PlayerInEvent"> | string
     eventId?: StringWithAggregatesFilter<"PlayerInEvent"> | string
     playerId?: StringWithAggregatesFilter<"PlayerInEvent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PlayerInEvent"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PlayerInEvent"> | Date | string
+  }
+
+  export type TenantCreateInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutTenantInput
+    players?: PlayerCreateNestedManyWithoutTenantInput
+    pokerEvents?: PokerEventCreateNestedManyWithoutTenantInput
+    playerInEvents?: PlayerInEventCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    players?: PlayerUncheckedCreateNestedManyWithoutTenantInput
+    pokerEvents?: PokerEventUncheckedCreateNestedManyWithoutTenantInput
+    playerInEvents?: PlayerInEventUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutTenantNestedInput
+    players?: PlayerUpdateManyWithoutTenantNestedInput
+    pokerEvents?: PokerEventUpdateManyWithoutTenantNestedInput
+    playerInEvents?: PlayerInEventUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    players?: PlayerUncheckedUpdateManyWithoutTenantNestedInput
+    pokerEvents?: PokerEventUncheckedUpdateManyWithoutTenantNestedInput
+    playerInEvents?: PlayerInEventUncheckedUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantCreateManyInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TenantUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TenantUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateInput = {
     id?: string
     username: string
+    email?: string | null
     passwordHash: string
+    role?: $Enums.UserRole
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutUsersInput
     players?: PlayerCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
     username: string
+    email?: string | null
     passwordHash: string
+    role?: $Enums.UserRole
+    tenantId: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     players?: PlayerUncheckedCreateNestedManyWithoutCreatedByInput
@@ -6112,16 +7951,24 @@ export namespace Prisma {
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput
     players?: PlayerUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    tenantId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -6130,7 +7977,11 @@ export namespace Prisma {
   export type UserCreateManyInput = {
     id?: string
     username: string
+    email?: string | null
     passwordHash: string
+    role?: $Enums.UserRole
+    tenantId: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6138,7 +7989,10 @@ export namespace Prisma {
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6146,7 +8000,11 @@ export namespace Prisma {
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    tenantId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6156,6 +8014,7 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPlayersInput
     createdBy: UserCreateNestedOneWithoutPlayersInput
     pokerEvents?: PlayerInEventCreateNestedManyWithoutPlayerInput
     hostedEvents?: PokerEventCreateNestedManyWithoutHostInput
@@ -6164,9 +8023,10 @@ export namespace Prisma {
   export type PlayerUncheckedCreateInput = {
     id?: string
     name: string
+    tenantId: string
+    createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdById: string
     pokerEvents?: PlayerInEventUncheckedCreateNestedManyWithoutPlayerInput
     hostedEvents?: PokerEventUncheckedCreateNestedManyWithoutHostInput
   }
@@ -6176,6 +8036,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPlayersNestedInput
     createdBy?: UserUpdateOneRequiredWithoutPlayersNestedInput
     pokerEvents?: PlayerInEventUpdateManyWithoutPlayerNestedInput
     hostedEvents?: PokerEventUpdateManyWithoutHostNestedInput
@@ -6184,9 +8045,10 @@ export namespace Prisma {
   export type PlayerUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     pokerEvents?: PlayerInEventUncheckedUpdateManyWithoutPlayerNestedInput
     hostedEvents?: PokerEventUncheckedUpdateManyWithoutHostNestedInput
   }
@@ -6194,9 +8056,10 @@ export namespace Prisma {
   export type PlayerCreateManyInput = {
     id?: string
     name: string
+    tenantId: string
+    createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdById: string
   }
 
   export type PlayerUpdateManyMutationInput = {
@@ -6209,9 +8072,10 @@ export namespace Prisma {
   export type PlayerUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
   }
 
   export type PokerEventCreateInput = {
@@ -6220,6 +8084,7 @@ export namespace Prisma {
     status?: $Enums.EventStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPokerEventsInput
     host: PlayerCreateNestedOneWithoutHostedEventsInput
     players?: PlayerInEventCreateNestedManyWithoutEventInput
   }
@@ -6228,9 +8093,10 @@ export namespace Prisma {
     id?: string
     date?: Date | string
     status?: $Enums.EventStatus
+    tenantId: string
+    hostId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    hostId: string
     players?: PlayerInEventUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -6240,6 +8106,7 @@ export namespace Prisma {
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPokerEventsNestedInput
     host?: PlayerUpdateOneRequiredWithoutHostedEventsNestedInput
     players?: PlayerInEventUpdateManyWithoutEventNestedInput
   }
@@ -6248,9 +8115,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    tenantId?: StringFieldUpdateOperationsInput | string
+    hostId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    hostId?: StringFieldUpdateOperationsInput | string
     players?: PlayerInEventUncheckedUpdateManyWithoutEventNestedInput
   }
 
@@ -6258,9 +8126,10 @@ export namespace Prisma {
     id?: string
     date?: Date | string
     status?: $Enums.EventStatus
+    tenantId: string
+    hostId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    hostId: string
   }
 
   export type PokerEventUpdateManyMutationInput = {
@@ -6275,9 +8144,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    tenantId?: StringFieldUpdateOperationsInput | string
+    hostId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    hostId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PlayerInEventCreateInput = {
@@ -6286,6 +8156,7 @@ export namespace Prisma {
     cashOutAmount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPlayerInEventsInput
     event: PokerEventCreateNestedOneWithoutPlayersInput
     player: PlayerCreateNestedOneWithoutPokerEventsInput
   }
@@ -6294,10 +8165,11 @@ export namespace Prisma {
     id?: string
     buyIns?: number
     cashOutAmount?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    tenantId: string
     eventId: string
     playerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PlayerInEventUpdateInput = {
@@ -6306,6 +8178,7 @@ export namespace Prisma {
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPlayerInEventsNestedInput
     event?: PokerEventUpdateOneRequiredWithoutPlayersNestedInput
     player?: PlayerUpdateOneRequiredWithoutPokerEventsNestedInput
   }
@@ -6314,20 +8187,22 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     buyIns?: IntFieldUpdateOperationsInput | number
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     playerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PlayerInEventCreateManyInput = {
     id?: string
     buyIns?: number
     cashOutAmount?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+    tenantId: string
     eventId: string
     playerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PlayerInEventUpdateManyMutationInput = {
@@ -6342,10 +8217,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     buyIns?: IntFieldUpdateOperationsInput | number
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     playerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -6363,6 +8239,56 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type EnumTenantPlanFilter<$PrismaModel = never> = {
+    equals?: $Enums.TenantPlan | EnumTenantPlanFieldRefInput<$PrismaModel>
+    in?: $Enums.TenantPlan[] | ListEnumTenantPlanFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TenantPlan[] | ListEnumTenantPlanFieldRefInput<$PrismaModel>
+    not?: NestedEnumTenantPlanFilter<$PrismaModel> | $Enums.TenantPlan
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6374,36 +8300,81 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
   export type PlayerListRelationFilter = {
     every?: PlayerWhereInput
     some?: PlayerWhereInput
     none?: PlayerWhereInput
   }
 
+  export type PokerEventListRelationFilter = {
+    every?: PokerEventWhereInput
+    some?: PokerEventWhereInput
+    none?: PokerEventWhereInput
+  }
+
+  export type PlayerInEventListRelationFilter = {
+    every?: PlayerInEventWhereInput
+    some?: PlayerInEventWhereInput
+    none?: PlayerInEventWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type PlayerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type UserCountOrderByAggregateInput = {
+  export type PokerEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PlayerInEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TenantCountOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
-    passwordHash?: SortOrder
+    name?: SortOrder
+    subdomain?: SortOrder
+    customDomain?: SortOrder
+    plan?: SortOrder
+    settings?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type UserMaxOrderByAggregateInput = {
+  export type TenantMaxOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
-    passwordHash?: SortOrder
+    name?: SortOrder
+    subdomain?: SortOrder
+    customDomain?: SortOrder
+    plan?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type UserMinOrderByAggregateInput = {
+  export type TenantMinOrderByAggregateInput = {
     id?: SortOrder
-    username?: SortOrder
-    passwordHash?: SortOrder
+    name?: SortOrder
+    subdomain?: SortOrder
+    customDomain?: SortOrder
+    plan?: SortOrder
+    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6426,6 +8397,68 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type EnumTenantPlanWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TenantPlan | EnumTenantPlanFieldRefInput<$PrismaModel>
+    in?: $Enums.TenantPlan[] | ListEnumTenantPlanFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TenantPlan[] | ListEnumTenantPlanFieldRefInput<$PrismaModel>
+    not?: NestedEnumTenantPlanWithAggregatesFilter<$PrismaModel> | $Enums.TenantPlan
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTenantPlanFilter<$PrismaModel>
+    _max?: NestedEnumTenantPlanFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6440,53 +8473,104 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
+  export type TenantScalarRelationFilter = {
+    is?: TenantWhereInput
+    isNot?: TenantWhereInput
+  }
+
+  export type UserUsernameTenantIdCompoundUniqueInput = {
+    username: string
+    tenantId: string
+  }
+
+  export type UserEmailTenantIdCompoundUniqueInput = {
+    email: string
+    tenantId: string
+  }
+
+  export type UserCountOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    email?: SortOrder
+    passwordHash?: SortOrder
+    role?: SortOrder
+    tenantId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserMaxOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    email?: SortOrder
+    passwordHash?: SortOrder
+    role?: SortOrder
+    tenantId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserMinOrderByAggregateInput = {
+    id?: SortOrder
+    username?: SortOrder
+    email?: SortOrder
+    passwordHash?: SortOrder
+    role?: SortOrder
+    tenantId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
   }
 
-  export type PlayerInEventListRelationFilter = {
-    every?: PlayerInEventWhereInput
-    some?: PlayerInEventWhereInput
-    none?: PlayerInEventWhereInput
-  }
-
-  export type PokerEventListRelationFilter = {
-    every?: PokerEventWhereInput
-    some?: PokerEventWhereInput
-    none?: PokerEventWhereInput
-  }
-
-  export type PlayerInEventOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PokerEventOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type PlayerCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    createdById?: SortOrder
   }
 
   export type PlayerMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    createdById?: SortOrder
   }
 
   export type PlayerMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    tenantId?: SortOrder
+    createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    createdById?: SortOrder
   }
 
   export type EnumEventStatusFilter<$PrismaModel = never> = {
@@ -6505,27 +8589,30 @@ export namespace Prisma {
     id?: SortOrder
     date?: SortOrder
     status?: SortOrder
+    tenantId?: SortOrder
+    hostId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    hostId?: SortOrder
   }
 
   export type PokerEventMaxOrderByAggregateInput = {
     id?: SortOrder
     date?: SortOrder
     status?: SortOrder
+    tenantId?: SortOrder
+    hostId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    hostId?: SortOrder
   }
 
   export type PokerEventMinOrderByAggregateInput = {
     id?: SortOrder
     date?: SortOrder
     status?: SortOrder
+    tenantId?: SortOrder
+    hostId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    hostId?: SortOrder
   }
 
   export type EnumEventStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -6565,11 +8652,6 @@ export namespace Prisma {
     isNot?: PokerEventWhereInput
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
   export type PlayerInEventEventIdPlayerIdCompoundUniqueInput = {
     eventId: string
     playerId: string
@@ -6579,10 +8661,11 @@ export namespace Prisma {
     id?: SortOrder
     buyIns?: SortOrder
     cashOutAmount?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    tenantId?: SortOrder
     eventId?: SortOrder
     playerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PlayerInEventAvgOrderByAggregateInput = {
@@ -6594,20 +8677,22 @@ export namespace Prisma {
     id?: SortOrder
     buyIns?: SortOrder
     cashOutAmount?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    tenantId?: SortOrder
     eventId?: SortOrder
     playerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PlayerInEventMinOrderByAggregateInput = {
     id?: SortOrder
     buyIns?: SortOrder
     cashOutAmount?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    tenantId?: SortOrder
     eventId?: SortOrder
     playerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PlayerInEventSumOrderByAggregateInput = {
@@ -6647,6 +8732,200 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
+  export type UserCreateNestedManyWithoutTenantInput = {
+    create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
+    createMany?: UserCreateManyTenantInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type PlayerCreateNestedManyWithoutTenantInput = {
+    create?: XOR<PlayerCreateWithoutTenantInput, PlayerUncheckedCreateWithoutTenantInput> | PlayerCreateWithoutTenantInput[] | PlayerUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutTenantInput | PlayerCreateOrConnectWithoutTenantInput[]
+    createMany?: PlayerCreateManyTenantInputEnvelope
+    connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+  }
+
+  export type PokerEventCreateNestedManyWithoutTenantInput = {
+    create?: XOR<PokerEventCreateWithoutTenantInput, PokerEventUncheckedCreateWithoutTenantInput> | PokerEventCreateWithoutTenantInput[] | PokerEventUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PokerEventCreateOrConnectWithoutTenantInput | PokerEventCreateOrConnectWithoutTenantInput[]
+    createMany?: PokerEventCreateManyTenantInputEnvelope
+    connect?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+  }
+
+  export type PlayerInEventCreateNestedManyWithoutTenantInput = {
+    create?: XOR<PlayerInEventCreateWithoutTenantInput, PlayerInEventUncheckedCreateWithoutTenantInput> | PlayerInEventCreateWithoutTenantInput[] | PlayerInEventUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PlayerInEventCreateOrConnectWithoutTenantInput | PlayerInEventCreateOrConnectWithoutTenantInput[]
+    createMany?: PlayerInEventCreateManyTenantInputEnvelope
+    connect?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
+    createMany?: UserCreateManyTenantInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type PlayerUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<PlayerCreateWithoutTenantInput, PlayerUncheckedCreateWithoutTenantInput> | PlayerCreateWithoutTenantInput[] | PlayerUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutTenantInput | PlayerCreateOrConnectWithoutTenantInput[]
+    createMany?: PlayerCreateManyTenantInputEnvelope
+    connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+  }
+
+  export type PokerEventUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<PokerEventCreateWithoutTenantInput, PokerEventUncheckedCreateWithoutTenantInput> | PokerEventCreateWithoutTenantInput[] | PokerEventUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PokerEventCreateOrConnectWithoutTenantInput | PokerEventCreateOrConnectWithoutTenantInput[]
+    createMany?: PokerEventCreateManyTenantInputEnvelope
+    connect?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+  }
+
+  export type PlayerInEventUncheckedCreateNestedManyWithoutTenantInput = {
+    create?: XOR<PlayerInEventCreateWithoutTenantInput, PlayerInEventUncheckedCreateWithoutTenantInput> | PlayerInEventCreateWithoutTenantInput[] | PlayerInEventUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PlayerInEventCreateOrConnectWithoutTenantInput | PlayerInEventCreateOrConnectWithoutTenantInput[]
+    createMany?: PlayerInEventCreateManyTenantInputEnvelope
+    connect?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type EnumTenantPlanFieldUpdateOperationsInput = {
+    set?: $Enums.TenantPlan
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type UserUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutTenantInput | UserUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: UserCreateManyTenantInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutTenantInput | UserUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutTenantInput | UserUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type PlayerUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<PlayerCreateWithoutTenantInput, PlayerUncheckedCreateWithoutTenantInput> | PlayerCreateWithoutTenantInput[] | PlayerUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutTenantInput | PlayerCreateOrConnectWithoutTenantInput[]
+    upsert?: PlayerUpsertWithWhereUniqueWithoutTenantInput | PlayerUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: PlayerCreateManyTenantInputEnvelope
+    set?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    disconnect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    delete?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    update?: PlayerUpdateWithWhereUniqueWithoutTenantInput | PlayerUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: PlayerUpdateManyWithWhereWithoutTenantInput | PlayerUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
+  }
+
+  export type PokerEventUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<PokerEventCreateWithoutTenantInput, PokerEventUncheckedCreateWithoutTenantInput> | PokerEventCreateWithoutTenantInput[] | PokerEventUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PokerEventCreateOrConnectWithoutTenantInput | PokerEventCreateOrConnectWithoutTenantInput[]
+    upsert?: PokerEventUpsertWithWhereUniqueWithoutTenantInput | PokerEventUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: PokerEventCreateManyTenantInputEnvelope
+    set?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+    disconnect?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+    delete?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+    connect?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+    update?: PokerEventUpdateWithWhereUniqueWithoutTenantInput | PokerEventUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: PokerEventUpdateManyWithWhereWithoutTenantInput | PokerEventUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: PokerEventScalarWhereInput | PokerEventScalarWhereInput[]
+  }
+
+  export type PlayerInEventUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<PlayerInEventCreateWithoutTenantInput, PlayerInEventUncheckedCreateWithoutTenantInput> | PlayerInEventCreateWithoutTenantInput[] | PlayerInEventUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PlayerInEventCreateOrConnectWithoutTenantInput | PlayerInEventCreateOrConnectWithoutTenantInput[]
+    upsert?: PlayerInEventUpsertWithWhereUniqueWithoutTenantInput | PlayerInEventUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: PlayerInEventCreateManyTenantInputEnvelope
+    set?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+    disconnect?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+    delete?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+    connect?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+    update?: PlayerInEventUpdateWithWhereUniqueWithoutTenantInput | PlayerInEventUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: PlayerInEventUpdateManyWithWhereWithoutTenantInput | PlayerInEventUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: PlayerInEventScalarWhereInput | PlayerInEventScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutTenantInput | UserUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: UserCreateManyTenantInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutTenantInput | UserUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutTenantInput | UserUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type PlayerUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<PlayerCreateWithoutTenantInput, PlayerUncheckedCreateWithoutTenantInput> | PlayerCreateWithoutTenantInput[] | PlayerUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PlayerCreateOrConnectWithoutTenantInput | PlayerCreateOrConnectWithoutTenantInput[]
+    upsert?: PlayerUpsertWithWhereUniqueWithoutTenantInput | PlayerUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: PlayerCreateManyTenantInputEnvelope
+    set?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    disconnect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    delete?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
+    update?: PlayerUpdateWithWhereUniqueWithoutTenantInput | PlayerUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: PlayerUpdateManyWithWhereWithoutTenantInput | PlayerUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
+  }
+
+  export type PokerEventUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<PokerEventCreateWithoutTenantInput, PokerEventUncheckedCreateWithoutTenantInput> | PokerEventCreateWithoutTenantInput[] | PokerEventUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PokerEventCreateOrConnectWithoutTenantInput | PokerEventCreateOrConnectWithoutTenantInput[]
+    upsert?: PokerEventUpsertWithWhereUniqueWithoutTenantInput | PokerEventUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: PokerEventCreateManyTenantInputEnvelope
+    set?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+    disconnect?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+    delete?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+    connect?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+    update?: PokerEventUpdateWithWhereUniqueWithoutTenantInput | PokerEventUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: PokerEventUpdateManyWithWhereWithoutTenantInput | PokerEventUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: PokerEventScalarWhereInput | PokerEventScalarWhereInput[]
+  }
+
+  export type PlayerInEventUncheckedUpdateManyWithoutTenantNestedInput = {
+    create?: XOR<PlayerInEventCreateWithoutTenantInput, PlayerInEventUncheckedCreateWithoutTenantInput> | PlayerInEventCreateWithoutTenantInput[] | PlayerInEventUncheckedCreateWithoutTenantInput[]
+    connectOrCreate?: PlayerInEventCreateOrConnectWithoutTenantInput | PlayerInEventCreateOrConnectWithoutTenantInput[]
+    upsert?: PlayerInEventUpsertWithWhereUniqueWithoutTenantInput | PlayerInEventUpsertWithWhereUniqueWithoutTenantInput[]
+    createMany?: PlayerInEventCreateManyTenantInputEnvelope
+    set?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+    disconnect?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+    delete?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+    connect?: PlayerInEventWhereUniqueInput | PlayerInEventWhereUniqueInput[]
+    update?: PlayerInEventUpdateWithWhereUniqueWithoutTenantInput | PlayerInEventUpdateWithWhereUniqueWithoutTenantInput[]
+    updateMany?: PlayerInEventUpdateManyWithWhereWithoutTenantInput | PlayerInEventUpdateManyWithWhereWithoutTenantInput[]
+    deleteMany?: PlayerInEventScalarWhereInput | PlayerInEventScalarWhereInput[]
+  }
+
+  export type TenantCreateNestedOneWithoutUsersInput = {
+    create?: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutUsersInput
+    connect?: TenantWhereUniqueInput
+  }
+
   export type PlayerCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<PlayerCreateWithoutCreatedByInput, PlayerUncheckedCreateWithoutCreatedByInput> | PlayerCreateWithoutCreatedByInput[] | PlayerUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: PlayerCreateOrConnectWithoutCreatedByInput | PlayerCreateOrConnectWithoutCreatedByInput[]
@@ -6661,12 +8940,16 @@ export namespace Prisma {
     connect?: PlayerWhereUniqueInput | PlayerWhereUniqueInput[]
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
+  export type EnumUserRoleFieldUpdateOperationsInput = {
+    set?: $Enums.UserRole
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type TenantUpdateOneRequiredWithoutUsersNestedInput = {
+    create?: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutUsersInput
+    upsert?: TenantUpsertWithoutUsersInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutUsersInput, TenantUpdateWithoutUsersInput>, TenantUncheckedUpdateWithoutUsersInput>
   }
 
   export type PlayerUpdateManyWithoutCreatedByNestedInput = {
@@ -6695,6 +8978,12 @@ export namespace Prisma {
     update?: PlayerUpdateWithWhereUniqueWithoutCreatedByInput | PlayerUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: PlayerUpdateManyWithWhereWithoutCreatedByInput | PlayerUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
+  }
+
+  export type TenantCreateNestedOneWithoutPlayersInput = {
+    create?: XOR<TenantCreateWithoutPlayersInput, TenantUncheckedCreateWithoutPlayersInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutPlayersInput
+    connect?: TenantWhereUniqueInput
   }
 
   export type UserCreateNestedOneWithoutPlayersInput = {
@@ -6729,6 +9018,14 @@ export namespace Prisma {
     connectOrCreate?: PokerEventCreateOrConnectWithoutHostInput | PokerEventCreateOrConnectWithoutHostInput[]
     createMany?: PokerEventCreateManyHostInputEnvelope
     connect?: PokerEventWhereUniqueInput | PokerEventWhereUniqueInput[]
+  }
+
+  export type TenantUpdateOneRequiredWithoutPlayersNestedInput = {
+    create?: XOR<TenantCreateWithoutPlayersInput, TenantUncheckedCreateWithoutPlayersInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutPlayersInput
+    upsert?: TenantUpsertWithoutPlayersInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutPlayersInput, TenantUpdateWithoutPlayersInput>, TenantUncheckedUpdateWithoutPlayersInput>
   }
 
   export type UserUpdateOneRequiredWithoutPlayersNestedInput = {
@@ -6795,6 +9092,12 @@ export namespace Prisma {
     deleteMany?: PokerEventScalarWhereInput | PokerEventScalarWhereInput[]
   }
 
+  export type TenantCreateNestedOneWithoutPokerEventsInput = {
+    create?: XOR<TenantCreateWithoutPokerEventsInput, TenantUncheckedCreateWithoutPokerEventsInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutPokerEventsInput
+    connect?: TenantWhereUniqueInput
+  }
+
   export type PlayerCreateNestedOneWithoutHostedEventsInput = {
     create?: XOR<PlayerCreateWithoutHostedEventsInput, PlayerUncheckedCreateWithoutHostedEventsInput>
     connectOrCreate?: PlayerCreateOrConnectWithoutHostedEventsInput
@@ -6817,6 +9120,14 @@ export namespace Prisma {
 
   export type EnumEventStatusFieldUpdateOperationsInput = {
     set?: $Enums.EventStatus
+  }
+
+  export type TenantUpdateOneRequiredWithoutPokerEventsNestedInput = {
+    create?: XOR<TenantCreateWithoutPokerEventsInput, TenantUncheckedCreateWithoutPokerEventsInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutPokerEventsInput
+    upsert?: TenantUpsertWithoutPokerEventsInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutPokerEventsInput, TenantUpdateWithoutPokerEventsInput>, TenantUncheckedUpdateWithoutPokerEventsInput>
   }
 
   export type PlayerUpdateOneRequiredWithoutHostedEventsNestedInput = {
@@ -6855,6 +9166,12 @@ export namespace Prisma {
     deleteMany?: PlayerInEventScalarWhereInput | PlayerInEventScalarWhereInput[]
   }
 
+  export type TenantCreateNestedOneWithoutPlayerInEventsInput = {
+    create?: XOR<TenantCreateWithoutPlayerInEventsInput, TenantUncheckedCreateWithoutPlayerInEventsInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutPlayerInEventsInput
+    connect?: TenantWhereUniqueInput
+  }
+
   export type PokerEventCreateNestedOneWithoutPlayersInput = {
     create?: XOR<PokerEventCreateWithoutPlayersInput, PokerEventUncheckedCreateWithoutPlayersInput>
     connectOrCreate?: PokerEventCreateOrConnectWithoutPlayersInput
@@ -6881,6 +9198,14 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type TenantUpdateOneRequiredWithoutPlayerInEventsNestedInput = {
+    create?: XOR<TenantCreateWithoutPlayerInEventsInput, TenantUncheckedCreateWithoutPlayerInEventsInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutPlayerInEventsInput
+    upsert?: TenantUpsertWithoutPlayerInEventsInput
+    connect?: TenantWhereUniqueInput
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutPlayerInEventsInput, TenantUpdateWithoutPlayerInEventsInput>, TenantUncheckedUpdateWithoutPlayerInEventsInput>
   }
 
   export type PokerEventUpdateOneRequiredWithoutPlayersNestedInput = {
@@ -6911,6 +9236,32 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedEnumTenantPlanFilter<$PrismaModel = never> = {
+    equals?: $Enums.TenantPlan | EnumTenantPlanFieldRefInput<$PrismaModel>
+    in?: $Enums.TenantPlan[] | ListEnumTenantPlanFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TenantPlan[] | ListEnumTenantPlanFieldRefInput<$PrismaModel>
+    not?: NestedEnumTenantPlanFilter<$PrismaModel> | $Enums.TenantPlan
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -6952,6 +9303,75 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumTenantPlanWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TenantPlan | EnumTenantPlanFieldRefInput<$PrismaModel>
+    in?: $Enums.TenantPlan[] | ListEnumTenantPlanFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TenantPlan[] | ListEnumTenantPlanFieldRefInput<$PrismaModel>
+    not?: NestedEnumTenantPlanWithAggregatesFilter<$PrismaModel> | $Enums.TenantPlan
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTenantPlanFilter<$PrismaModel>
+    _max?: NestedEnumTenantPlanFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6964,6 +9384,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
+  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type NestedEnumEventStatusFilter<$PrismaModel = never> = {
@@ -6981,17 +9418,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumEventStatusFilter<$PrismaModel>
     _max?: NestedEnumEventStatusFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -7048,11 +9474,289 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type UserCreateWithoutTenantInput = {
+    id?: string
+    username: string
+    email?: string | null
+    passwordHash: string
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    players?: PlayerCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutTenantInput = {
+    id?: string
+    username: string
+    email?: string | null
+    passwordHash: string
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    players?: PlayerUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutTenantInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
+  }
+
+  export type UserCreateManyTenantInputEnvelope = {
+    data: UserCreateManyTenantInput | UserCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PlayerCreateWithoutTenantInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: UserCreateNestedOneWithoutPlayersInput
+    pokerEvents?: PlayerInEventCreateNestedManyWithoutPlayerInput
+    hostedEvents?: PokerEventCreateNestedManyWithoutHostInput
+  }
+
+  export type PlayerUncheckedCreateWithoutTenantInput = {
+    id?: string
+    name: string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    pokerEvents?: PlayerInEventUncheckedCreateNestedManyWithoutPlayerInput
+    hostedEvents?: PokerEventUncheckedCreateNestedManyWithoutHostInput
+  }
+
+  export type PlayerCreateOrConnectWithoutTenantInput = {
+    where: PlayerWhereUniqueInput
+    create: XOR<PlayerCreateWithoutTenantInput, PlayerUncheckedCreateWithoutTenantInput>
+  }
+
+  export type PlayerCreateManyTenantInputEnvelope = {
+    data: PlayerCreateManyTenantInput | PlayerCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PokerEventCreateWithoutTenantInput = {
+    id?: string
+    date?: Date | string
+    status?: $Enums.EventStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    host: PlayerCreateNestedOneWithoutHostedEventsInput
+    players?: PlayerInEventCreateNestedManyWithoutEventInput
+  }
+
+  export type PokerEventUncheckedCreateWithoutTenantInput = {
+    id?: string
+    date?: Date | string
+    status?: $Enums.EventStatus
+    hostId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    players?: PlayerInEventUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type PokerEventCreateOrConnectWithoutTenantInput = {
+    where: PokerEventWhereUniqueInput
+    create: XOR<PokerEventCreateWithoutTenantInput, PokerEventUncheckedCreateWithoutTenantInput>
+  }
+
+  export type PokerEventCreateManyTenantInputEnvelope = {
+    data: PokerEventCreateManyTenantInput | PokerEventCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PlayerInEventCreateWithoutTenantInput = {
+    id?: string
+    buyIns?: number
+    cashOutAmount?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: PokerEventCreateNestedOneWithoutPlayersInput
+    player: PlayerCreateNestedOneWithoutPokerEventsInput
+  }
+
+  export type PlayerInEventUncheckedCreateWithoutTenantInput = {
+    id?: string
+    buyIns?: number
+    cashOutAmount?: number | null
+    eventId: string
+    playerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlayerInEventCreateOrConnectWithoutTenantInput = {
+    where: PlayerInEventWhereUniqueInput
+    create: XOR<PlayerInEventCreateWithoutTenantInput, PlayerInEventUncheckedCreateWithoutTenantInput>
+  }
+
+  export type PlayerInEventCreateManyTenantInputEnvelope = {
+    data: PlayerInEventCreateManyTenantInput | PlayerInEventCreateManyTenantInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutTenantInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutTenantInput, UserUncheckedUpdateWithoutTenantInput>
+    create: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutTenantInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutTenantInput, UserUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutTenantInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: StringFilter<"User"> | string
+    username?: StringFilter<"User"> | string
+    email?: StringNullableFilter<"User"> | string | null
+    passwordHash?: StringFilter<"User"> | string
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    tenantId?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+  }
+
+  export type PlayerUpsertWithWhereUniqueWithoutTenantInput = {
+    where: PlayerWhereUniqueInput
+    update: XOR<PlayerUpdateWithoutTenantInput, PlayerUncheckedUpdateWithoutTenantInput>
+    create: XOR<PlayerCreateWithoutTenantInput, PlayerUncheckedCreateWithoutTenantInput>
+  }
+
+  export type PlayerUpdateWithWhereUniqueWithoutTenantInput = {
+    where: PlayerWhereUniqueInput
+    data: XOR<PlayerUpdateWithoutTenantInput, PlayerUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type PlayerUpdateManyWithWhereWithoutTenantInput = {
+    where: PlayerScalarWhereInput
+    data: XOR<PlayerUpdateManyMutationInput, PlayerUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type PlayerScalarWhereInput = {
+    AND?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
+    OR?: PlayerScalarWhereInput[]
+    NOT?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
+    id?: StringFilter<"Player"> | string
+    name?: StringFilter<"Player"> | string
+    tenantId?: StringFilter<"Player"> | string
+    createdById?: StringFilter<"Player"> | string
+    createdAt?: DateTimeFilter<"Player"> | Date | string
+    updatedAt?: DateTimeFilter<"Player"> | Date | string
+  }
+
+  export type PokerEventUpsertWithWhereUniqueWithoutTenantInput = {
+    where: PokerEventWhereUniqueInput
+    update: XOR<PokerEventUpdateWithoutTenantInput, PokerEventUncheckedUpdateWithoutTenantInput>
+    create: XOR<PokerEventCreateWithoutTenantInput, PokerEventUncheckedCreateWithoutTenantInput>
+  }
+
+  export type PokerEventUpdateWithWhereUniqueWithoutTenantInput = {
+    where: PokerEventWhereUniqueInput
+    data: XOR<PokerEventUpdateWithoutTenantInput, PokerEventUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type PokerEventUpdateManyWithWhereWithoutTenantInput = {
+    where: PokerEventScalarWhereInput
+    data: XOR<PokerEventUpdateManyMutationInput, PokerEventUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type PokerEventScalarWhereInput = {
+    AND?: PokerEventScalarWhereInput | PokerEventScalarWhereInput[]
+    OR?: PokerEventScalarWhereInput[]
+    NOT?: PokerEventScalarWhereInput | PokerEventScalarWhereInput[]
+    id?: StringFilter<"PokerEvent"> | string
+    date?: DateTimeFilter<"PokerEvent"> | Date | string
+    status?: EnumEventStatusFilter<"PokerEvent"> | $Enums.EventStatus
+    tenantId?: StringFilter<"PokerEvent"> | string
+    hostId?: StringFilter<"PokerEvent"> | string
+    createdAt?: DateTimeFilter<"PokerEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"PokerEvent"> | Date | string
+  }
+
+  export type PlayerInEventUpsertWithWhereUniqueWithoutTenantInput = {
+    where: PlayerInEventWhereUniqueInput
+    update: XOR<PlayerInEventUpdateWithoutTenantInput, PlayerInEventUncheckedUpdateWithoutTenantInput>
+    create: XOR<PlayerInEventCreateWithoutTenantInput, PlayerInEventUncheckedCreateWithoutTenantInput>
+  }
+
+  export type PlayerInEventUpdateWithWhereUniqueWithoutTenantInput = {
+    where: PlayerInEventWhereUniqueInput
+    data: XOR<PlayerInEventUpdateWithoutTenantInput, PlayerInEventUncheckedUpdateWithoutTenantInput>
+  }
+
+  export type PlayerInEventUpdateManyWithWhereWithoutTenantInput = {
+    where: PlayerInEventScalarWhereInput
+    data: XOR<PlayerInEventUpdateManyMutationInput, PlayerInEventUncheckedUpdateManyWithoutTenantInput>
+  }
+
+  export type PlayerInEventScalarWhereInput = {
+    AND?: PlayerInEventScalarWhereInput | PlayerInEventScalarWhereInput[]
+    OR?: PlayerInEventScalarWhereInput[]
+    NOT?: PlayerInEventScalarWhereInput | PlayerInEventScalarWhereInput[]
+    id?: StringFilter<"PlayerInEvent"> | string
+    buyIns?: IntFilter<"PlayerInEvent"> | number
+    cashOutAmount?: IntNullableFilter<"PlayerInEvent"> | number | null
+    tenantId?: StringFilter<"PlayerInEvent"> | string
+    eventId?: StringFilter<"PlayerInEvent"> | string
+    playerId?: StringFilter<"PlayerInEvent"> | string
+    createdAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
+  }
+
+  export type TenantCreateWithoutUsersInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    players?: PlayerCreateNestedManyWithoutTenantInput
+    pokerEvents?: PokerEventCreateNestedManyWithoutTenantInput
+    playerInEvents?: PlayerInEventCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutUsersInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    players?: PlayerUncheckedCreateNestedManyWithoutTenantInput
+    pokerEvents?: PokerEventUncheckedCreateNestedManyWithoutTenantInput
+    playerInEvents?: PlayerInEventUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutUsersInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>
+  }
+
   export type PlayerCreateWithoutCreatedByInput = {
     id?: string
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPlayersInput
     pokerEvents?: PlayerInEventCreateNestedManyWithoutPlayerInput
     hostedEvents?: PokerEventCreateNestedManyWithoutHostInput
   }
@@ -7060,6 +9764,7 @@ export namespace Prisma {
   export type PlayerUncheckedCreateWithoutCreatedByInput = {
     id?: string
     name: string
+    tenantId: string
     createdAt?: Date | string
     updatedAt?: Date | string
     pokerEvents?: PlayerInEventUncheckedCreateNestedManyWithoutPlayerInput
@@ -7074,6 +9779,47 @@ export namespace Prisma {
   export type PlayerCreateManyCreatedByInputEnvelope = {
     data: PlayerCreateManyCreatedByInput | PlayerCreateManyCreatedByInput[]
     skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutUsersInput = {
+    update: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>
+    create: XOR<TenantCreateWithoutUsersInput, TenantUncheckedCreateWithoutUsersInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutUsersInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutUsersInput, TenantUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type TenantUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    players?: PlayerUpdateManyWithoutTenantNestedInput
+    pokerEvents?: PokerEventUpdateManyWithoutTenantNestedInput
+    playerInEvents?: PlayerInEventUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    players?: PlayerUncheckedUpdateManyWithoutTenantNestedInput
+    pokerEvents?: PokerEventUncheckedUpdateManyWithoutTenantNestedInput
+    playerInEvents?: PlayerInEventUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type PlayerUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -7092,29 +9838,61 @@ export namespace Prisma {
     data: XOR<PlayerUpdateManyMutationInput, PlayerUncheckedUpdateManyWithoutCreatedByInput>
   }
 
-  export type PlayerScalarWhereInput = {
-    AND?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
-    OR?: PlayerScalarWhereInput[]
-    NOT?: PlayerScalarWhereInput | PlayerScalarWhereInput[]
-    id?: StringFilter<"Player"> | string
-    name?: StringFilter<"Player"> | string
-    createdAt?: DateTimeFilter<"Player"> | Date | string
-    updatedAt?: DateTimeFilter<"Player"> | Date | string
-    createdById?: StringFilter<"Player"> | string
+  export type TenantCreateWithoutPlayersInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutTenantInput
+    pokerEvents?: PokerEventCreateNestedManyWithoutTenantInput
+    playerInEvents?: PlayerInEventCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutPlayersInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    pokerEvents?: PokerEventUncheckedCreateNestedManyWithoutTenantInput
+    playerInEvents?: PlayerInEventUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutPlayersInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutPlayersInput, TenantUncheckedCreateWithoutPlayersInput>
   }
 
   export type UserCreateWithoutPlayersInput = {
     id?: string
     username: string
+    email?: string | null
     passwordHash: string
+    role?: $Enums.UserRole
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutPlayersInput = {
     id?: string
     username: string
+    email?: string | null
     passwordHash: string
+    role?: $Enums.UserRole
+    tenantId: string
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7130,6 +9908,7 @@ export namespace Prisma {
     cashOutAmount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPlayerInEventsInput
     event: PokerEventCreateNestedOneWithoutPlayersInput
   }
 
@@ -7137,9 +9916,10 @@ export namespace Prisma {
     id?: string
     buyIns?: number
     cashOutAmount?: number | null
+    tenantId: string
+    eventId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    eventId: string
   }
 
   export type PlayerInEventCreateOrConnectWithoutPlayerInput = {
@@ -7158,6 +9938,7 @@ export namespace Prisma {
     status?: $Enums.EventStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPokerEventsInput
     players?: PlayerInEventCreateNestedManyWithoutEventInput
   }
 
@@ -7165,6 +9946,7 @@ export namespace Prisma {
     id?: string
     date?: Date | string
     status?: $Enums.EventStatus
+    tenantId: string
     createdAt?: Date | string
     updatedAt?: Date | string
     players?: PlayerInEventUncheckedCreateNestedManyWithoutEventInput
@@ -7178,6 +9960,47 @@ export namespace Prisma {
   export type PokerEventCreateManyHostInputEnvelope = {
     data: PokerEventCreateManyHostInput | PokerEventCreateManyHostInput[]
     skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutPlayersInput = {
+    update: XOR<TenantUpdateWithoutPlayersInput, TenantUncheckedUpdateWithoutPlayersInput>
+    create: XOR<TenantCreateWithoutPlayersInput, TenantUncheckedCreateWithoutPlayersInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutPlayersInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutPlayersInput, TenantUncheckedUpdateWithoutPlayersInput>
+  }
+
+  export type TenantUpdateWithoutPlayersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutTenantNestedInput
+    pokerEvents?: PokerEventUpdateManyWithoutTenantNestedInput
+    playerInEvents?: PlayerInEventUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutPlayersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    pokerEvents?: PokerEventUncheckedUpdateManyWithoutTenantNestedInput
+    playerInEvents?: PlayerInEventUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type UserUpsertWithoutPlayersInput = {
@@ -7194,15 +10017,23 @@ export namespace Prisma {
   export type UserUpdateWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlayersInput = {
     id?: StringFieldUpdateOperationsInput | string
     username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    tenantId?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7223,19 +10054,6 @@ export namespace Prisma {
     data: XOR<PlayerInEventUpdateManyMutationInput, PlayerInEventUncheckedUpdateManyWithoutPlayerInput>
   }
 
-  export type PlayerInEventScalarWhereInput = {
-    AND?: PlayerInEventScalarWhereInput | PlayerInEventScalarWhereInput[]
-    OR?: PlayerInEventScalarWhereInput[]
-    NOT?: PlayerInEventScalarWhereInput | PlayerInEventScalarWhereInput[]
-    id?: StringFilter<"PlayerInEvent"> | string
-    buyIns?: IntFilter<"PlayerInEvent"> | number
-    cashOutAmount?: IntNullableFilter<"PlayerInEvent"> | number | null
-    createdAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
-    updatedAt?: DateTimeFilter<"PlayerInEvent"> | Date | string
-    eventId?: StringFilter<"PlayerInEvent"> | string
-    playerId?: StringFilter<"PlayerInEvent"> | string
-  }
-
   export type PokerEventUpsertWithWhereUniqueWithoutHostInput = {
     where: PokerEventWhereUniqueInput
     update: XOR<PokerEventUpdateWithoutHostInput, PokerEventUncheckedUpdateWithoutHostInput>
@@ -7252,16 +10070,39 @@ export namespace Prisma {
     data: XOR<PokerEventUpdateManyMutationInput, PokerEventUncheckedUpdateManyWithoutHostInput>
   }
 
-  export type PokerEventScalarWhereInput = {
-    AND?: PokerEventScalarWhereInput | PokerEventScalarWhereInput[]
-    OR?: PokerEventScalarWhereInput[]
-    NOT?: PokerEventScalarWhereInput | PokerEventScalarWhereInput[]
-    id?: StringFilter<"PokerEvent"> | string
-    date?: DateTimeFilter<"PokerEvent"> | Date | string
-    status?: EnumEventStatusFilter<"PokerEvent"> | $Enums.EventStatus
-    createdAt?: DateTimeFilter<"PokerEvent"> | Date | string
-    updatedAt?: DateTimeFilter<"PokerEvent"> | Date | string
-    hostId?: StringFilter<"PokerEvent"> | string
+  export type TenantCreateWithoutPokerEventsInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutTenantInput
+    players?: PlayerCreateNestedManyWithoutTenantInput
+    playerInEvents?: PlayerInEventCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutPokerEventsInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    players?: PlayerUncheckedCreateNestedManyWithoutTenantInput
+    playerInEvents?: PlayerInEventUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutPokerEventsInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutPokerEventsInput, TenantUncheckedCreateWithoutPokerEventsInput>
   }
 
   export type PlayerCreateWithoutHostedEventsInput = {
@@ -7269,6 +10110,7 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPlayersInput
     createdBy: UserCreateNestedOneWithoutPlayersInput
     pokerEvents?: PlayerInEventCreateNestedManyWithoutPlayerInput
   }
@@ -7276,9 +10118,10 @@ export namespace Prisma {
   export type PlayerUncheckedCreateWithoutHostedEventsInput = {
     id?: string
     name: string
+    tenantId: string
+    createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdById: string
     pokerEvents?: PlayerInEventUncheckedCreateNestedManyWithoutPlayerInput
   }
 
@@ -7293,6 +10136,7 @@ export namespace Prisma {
     cashOutAmount?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPlayerInEventsInput
     player: PlayerCreateNestedOneWithoutPokerEventsInput
   }
 
@@ -7300,9 +10144,10 @@ export namespace Prisma {
     id?: string
     buyIns?: number
     cashOutAmount?: number | null
+    tenantId: string
+    playerId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    playerId: string
   }
 
   export type PlayerInEventCreateOrConnectWithoutEventInput = {
@@ -7313,6 +10158,47 @@ export namespace Prisma {
   export type PlayerInEventCreateManyEventInputEnvelope = {
     data: PlayerInEventCreateManyEventInput | PlayerInEventCreateManyEventInput[]
     skipDuplicates?: boolean
+  }
+
+  export type TenantUpsertWithoutPokerEventsInput = {
+    update: XOR<TenantUpdateWithoutPokerEventsInput, TenantUncheckedUpdateWithoutPokerEventsInput>
+    create: XOR<TenantCreateWithoutPokerEventsInput, TenantUncheckedCreateWithoutPokerEventsInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutPokerEventsInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutPokerEventsInput, TenantUncheckedUpdateWithoutPokerEventsInput>
+  }
+
+  export type TenantUpdateWithoutPokerEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutTenantNestedInput
+    players?: PlayerUpdateManyWithoutTenantNestedInput
+    playerInEvents?: PlayerInEventUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutPokerEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    players?: PlayerUncheckedUpdateManyWithoutTenantNestedInput
+    playerInEvents?: PlayerInEventUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type PlayerUpsertWithoutHostedEventsInput = {
@@ -7331,6 +10217,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPlayersNestedInput
     createdBy?: UserUpdateOneRequiredWithoutPlayersNestedInput
     pokerEvents?: PlayerInEventUpdateManyWithoutPlayerNestedInput
   }
@@ -7338,9 +10225,10 @@ export namespace Prisma {
   export type PlayerUncheckedUpdateWithoutHostedEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     pokerEvents?: PlayerInEventUncheckedUpdateManyWithoutPlayerNestedInput
   }
 
@@ -7360,12 +10248,48 @@ export namespace Prisma {
     data: XOR<PlayerInEventUpdateManyMutationInput, PlayerInEventUncheckedUpdateManyWithoutEventInput>
   }
 
+  export type TenantCreateWithoutPlayerInEventsInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutTenantInput
+    players?: PlayerCreateNestedManyWithoutTenantInput
+    pokerEvents?: PokerEventCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantUncheckedCreateWithoutPlayerInEventsInput = {
+    id?: string
+    name: string
+    subdomain: string
+    customDomain?: string | null
+    plan?: $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutTenantInput
+    players?: PlayerUncheckedCreateNestedManyWithoutTenantInput
+    pokerEvents?: PokerEventUncheckedCreateNestedManyWithoutTenantInput
+  }
+
+  export type TenantCreateOrConnectWithoutPlayerInEventsInput = {
+    where: TenantWhereUniqueInput
+    create: XOR<TenantCreateWithoutPlayerInEventsInput, TenantUncheckedCreateWithoutPlayerInEventsInput>
+  }
+
   export type PokerEventCreateWithoutPlayersInput = {
     id?: string
     date?: Date | string
     status?: $Enums.EventStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPokerEventsInput
     host: PlayerCreateNestedOneWithoutHostedEventsInput
   }
 
@@ -7373,9 +10297,10 @@ export namespace Prisma {
     id?: string
     date?: Date | string
     status?: $Enums.EventStatus
+    tenantId: string
+    hostId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    hostId: string
   }
 
   export type PokerEventCreateOrConnectWithoutPlayersInput = {
@@ -7388,6 +10313,7 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    tenant: TenantCreateNestedOneWithoutPlayersInput
     createdBy: UserCreateNestedOneWithoutPlayersInput
     hostedEvents?: PokerEventCreateNestedManyWithoutHostInput
   }
@@ -7395,15 +10321,57 @@ export namespace Prisma {
   export type PlayerUncheckedCreateWithoutPokerEventsInput = {
     id?: string
     name: string
+    tenantId: string
+    createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdById: string
     hostedEvents?: PokerEventUncheckedCreateNestedManyWithoutHostInput
   }
 
   export type PlayerCreateOrConnectWithoutPokerEventsInput = {
     where: PlayerWhereUniqueInput
     create: XOR<PlayerCreateWithoutPokerEventsInput, PlayerUncheckedCreateWithoutPokerEventsInput>
+  }
+
+  export type TenantUpsertWithoutPlayerInEventsInput = {
+    update: XOR<TenantUpdateWithoutPlayerInEventsInput, TenantUncheckedUpdateWithoutPlayerInEventsInput>
+    create: XOR<TenantCreateWithoutPlayerInEventsInput, TenantUncheckedCreateWithoutPlayerInEventsInput>
+    where?: TenantWhereInput
+  }
+
+  export type TenantUpdateToOneWithWhereWithoutPlayerInEventsInput = {
+    where?: TenantWhereInput
+    data: XOR<TenantUpdateWithoutPlayerInEventsInput, TenantUncheckedUpdateWithoutPlayerInEventsInput>
+  }
+
+  export type TenantUpdateWithoutPlayerInEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutTenantNestedInput
+    players?: PlayerUpdateManyWithoutTenantNestedInput
+    pokerEvents?: PokerEventUpdateManyWithoutTenantNestedInput
+  }
+
+  export type TenantUncheckedUpdateWithoutPlayerInEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    customDomain?: NullableStringFieldUpdateOperationsInput | string | null
+    plan?: EnumTenantPlanFieldUpdateOperationsInput | $Enums.TenantPlan
+    settings?: NullableJsonNullValueInput | InputJsonValue
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutTenantNestedInput
+    players?: PlayerUncheckedUpdateManyWithoutTenantNestedInput
+    pokerEvents?: PokerEventUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type PokerEventUpsertWithoutPlayersInput = {
@@ -7423,6 +10391,7 @@ export namespace Prisma {
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPokerEventsNestedInput
     host?: PlayerUpdateOneRequiredWithoutHostedEventsNestedInput
   }
 
@@ -7430,9 +10399,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    tenantId?: StringFieldUpdateOperationsInput | string
+    hostId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    hostId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PlayerUpsertWithoutPokerEventsInput = {
@@ -7451,6 +10421,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPlayersNestedInput
     createdBy?: UserUpdateOneRequiredWithoutPlayersNestedInput
     hostedEvents?: PokerEventUpdateManyWithoutHostNestedInput
   }
@@ -7458,15 +10429,177 @@ export namespace Prisma {
   export type PlayerUncheckedUpdateWithoutPokerEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
     hostedEvents?: PokerEventUncheckedUpdateManyWithoutHostNestedInput
+  }
+
+  export type UserCreateManyTenantInput = {
+    id?: string
+    username: string
+    email?: string | null
+    passwordHash: string
+    role?: $Enums.UserRole
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlayerCreateManyTenantInput = {
+    id?: string
+    name: string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PokerEventCreateManyTenantInput = {
+    id?: string
+    date?: Date | string
+    status?: $Enums.EventStatus
+    hostId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlayerInEventCreateManyTenantInput = {
+    id?: string
+    buyIns?: number
+    cashOutAmount?: number | null
+    eventId: string
+    playerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    players?: PlayerUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    players?: PlayerUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayerUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneRequiredWithoutPlayersNestedInput
+    pokerEvents?: PlayerInEventUpdateManyWithoutPlayerNestedInput
+    hostedEvents?: PokerEventUpdateManyWithoutHostNestedInput
+  }
+
+  export type PlayerUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pokerEvents?: PlayerInEventUncheckedUpdateManyWithoutPlayerNestedInput
+    hostedEvents?: PokerEventUncheckedUpdateManyWithoutHostNestedInput
+  }
+
+  export type PlayerUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PokerEventUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    host?: PlayerUpdateOneRequiredWithoutHostedEventsNestedInput
+    players?: PlayerInEventUpdateManyWithoutEventNestedInput
+  }
+
+  export type PokerEventUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    hostId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    players?: PlayerInEventUncheckedUpdateManyWithoutEventNestedInput
+  }
+
+  export type PokerEventUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    hostId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayerInEventUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    buyIns?: IntFieldUpdateOperationsInput | number
+    cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: PokerEventUpdateOneRequiredWithoutPlayersNestedInput
+    player?: PlayerUpdateOneRequiredWithoutPokerEventsNestedInput
+  }
+
+  export type PlayerInEventUncheckedUpdateWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    buyIns?: IntFieldUpdateOperationsInput | number
+    cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    eventId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayerInEventUncheckedUpdateManyWithoutTenantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    buyIns?: IntFieldUpdateOperationsInput | number
+    cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    eventId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PlayerCreateManyCreatedByInput = {
     id?: string
     name: string
+    tenantId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7476,6 +10609,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPlayersNestedInput
     pokerEvents?: PlayerInEventUpdateManyWithoutPlayerNestedInput
     hostedEvents?: PokerEventUpdateManyWithoutHostNestedInput
   }
@@ -7483,6 +10617,7 @@ export namespace Prisma {
   export type PlayerUncheckedUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pokerEvents?: PlayerInEventUncheckedUpdateManyWithoutPlayerNestedInput
@@ -7492,6 +10627,7 @@ export namespace Prisma {
   export type PlayerUncheckedUpdateManyWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7500,15 +10636,17 @@ export namespace Prisma {
     id?: string
     buyIns?: number
     cashOutAmount?: number | null
+    tenantId: string
+    eventId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    eventId: string
   }
 
   export type PokerEventCreateManyHostInput = {
     id?: string
     date?: Date | string
     status?: $Enums.EventStatus
+    tenantId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7519,6 +10657,7 @@ export namespace Prisma {
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPlayerInEventsNestedInput
     event?: PokerEventUpdateOneRequiredWithoutPlayersNestedInput
   }
 
@@ -7526,18 +10665,20 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     buyIns?: IntFieldUpdateOperationsInput | number
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    eventId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PlayerInEventUncheckedUpdateManyWithoutPlayerInput = {
     id?: StringFieldUpdateOperationsInput | string
     buyIns?: IntFieldUpdateOperationsInput | number
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    eventId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PokerEventUpdateWithoutHostInput = {
@@ -7546,6 +10687,7 @@ export namespace Prisma {
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPokerEventsNestedInput
     players?: PlayerInEventUpdateManyWithoutEventNestedInput
   }
 
@@ -7553,6 +10695,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    tenantId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     players?: PlayerInEventUncheckedUpdateManyWithoutEventNestedInput
@@ -7562,6 +10705,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    tenantId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7570,9 +10714,10 @@ export namespace Prisma {
     id?: string
     buyIns?: number
     cashOutAmount?: number | null
+    tenantId: string
+    playerId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    playerId: string
   }
 
   export type PlayerInEventUpdateWithoutEventInput = {
@@ -7581,6 +10726,7 @@ export namespace Prisma {
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tenant?: TenantUpdateOneRequiredWithoutPlayerInEventsNestedInput
     player?: PlayerUpdateOneRequiredWithoutPokerEventsNestedInput
   }
 
@@ -7588,18 +10734,20 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     buyIns?: IntFieldUpdateOperationsInput | number
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    playerId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PlayerInEventUncheckedUpdateManyWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     buyIns?: IntFieldUpdateOperationsInput | number
     cashOutAmount?: NullableIntFieldUpdateOperationsInput | number | null
+    tenantId?: StringFieldUpdateOperationsInput | string
+    playerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    playerId?: StringFieldUpdateOperationsInput | string
   }
 
 

@@ -18,6 +18,7 @@ export const authConfig = {
       credentials: {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
+        tenantId: { label: "Tenant ID", type: "hidden" }, // For tenant-specific login
       },
       async authorize(credentials) {
         // Basic validation for credentials object structure
@@ -31,18 +32,40 @@ export const authConfig = {
           return null;
         }
 
-        const { username, password } = credentials;
+        const { username, password, tenantId } = credentials;
 
         try {
-          const user = await prisma.user.findUnique({
-            where: { username: username },
+          // Build where clause for user lookup
+          const whereClause: any = { username: username };
+
+          // If tenantId is provided, use it; otherwise find user in any active tenant
+          if (tenantId && typeof tenantId === "string") {
+            whereClause.tenantId = tenantId;
+            whereClause.tenant = { isActive: true };
+          } else {
+            whereClause.tenant = { isActive: true };
+          }
+
+          const user = await prisma.user.findFirst({
+            where: whereClause,
+            include: {
+              tenant: {
+                select: {
+                  id: true,
+                  name: true,
+                  subdomain: true,
+                  plan: true,
+                  isActive: true,
+                },
+              },
+            },
           });
 
-          if (!user || !user.passwordHash) {
+          if (!user || !user.passwordHash || !user.tenant?.isActive) {
             console.log(
-              `User not found or password not set for username: ${username}`
+              `User not found, password not set, or tenant inactive for username: ${username}`
             );
-            return null; // User not found or password missing
+            return null;
           }
 
           // Validate password
@@ -52,21 +75,25 @@ export const authConfig = {
           );
           if (!isValidPassword) {
             console.log(`Invalid password attempt for username: ${username}`);
-            return null; // Passwords do not match
+            return null;
           }
 
-          console.log(`Successful login for username: ${username}`);
-          // Return user object (without password)
-          // Ensure this matches the User type expected by the session/jwt callbacks
+          console.log(
+            `Successful login for username: ${username} in tenant: ${user.tenant.name}`
+          );
+
+          // Return user object with tenant information
           return {
             id: user.id,
             username: user.username,
-            // name: user.name, // If you have a name field
-            // email: user.email, // If you have an email field
+            email: user.email,
+            role: user.role,
+            tenantId: user.tenantId,
+            tenant: user.tenant,
           };
         } catch (error) {
           console.error("Error during authorization:", error);
-          return null; // Return null on any error during DB query or comparison
+          return null;
         }
       },
     }),
@@ -92,23 +119,29 @@ export const authConfig = {
       // console.log("signIn callback", { user, account, profile });
       return true; // Allow sign in
     },
-    // Add user ID and username to the JWT
+    // Add user data to the JWT
     async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
         // User object is available on initial sign-in
         token.id = user.id;
         token.username = (user as User).username;
+        token.email = (user as User).email;
+        token.role = (user as User).role;
+        token.tenantId = (user as User).tenantId;
+        token.tenant = (user as User).tenant;
       }
       // console.log("jwt callback", { token });
       return token;
     },
-    // Add custom properties (like id, username) from the token to the session object
+    // Add custom properties from the token to the session object
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token?.id && session.user) {
         session.user.id = token.id as string;
-      }
-      if (token?.username && session.user) {
         session.user.username = token.username as string;
+        session.user.email = token.email as string;
+        session.user.role = token.role as string;
+        session.user.tenantId = token.tenantId as string;
+        session.user.tenant = token.tenant as any;
       }
       // console.log("session callback", { session });
       return session;

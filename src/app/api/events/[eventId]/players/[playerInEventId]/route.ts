@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getTenantPrisma } from "@/lib/prisma-tenant";
 
 // PATCH /api/events/[eventId]/players/[playerInEventId] - Update player in event
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,6 +24,8 @@ export async function PATCH(request: Request, context: any) {
   }
 
   try {
+    const { prisma } = await getTenantPrisma();
+
     // Verify the event belongs to the user first
     const event = await prisma.pokerEvent.findFirst({
       where: {
@@ -31,6 +33,7 @@ export async function PATCH(request: Request, context: any) {
         host: {
           createdById: session.user.id,
         },
+        // tenantId automatically added by middleware
       },
       select: { id: true, status: true }, // Also select status to prevent updates on completed events
     });
@@ -73,6 +76,7 @@ export async function PATCH(request: Request, context: any) {
       where: {
         id: playerInEventId,
         eventId: eventId, // Ensure the record belongs to the correct event
+        // tenantId automatically added by middleware
       },
       data: updateData,
       include: {

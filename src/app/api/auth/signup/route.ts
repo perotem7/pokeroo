@@ -2,14 +2,24 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+// Function to generate a subdomain from account name
+function generateSubdomain(accountName: string): string {
+  return accountName
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "-") // Replace non-alphanumeric with hyphens
+    .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+    .replace(/^-|-$/g, "") // Remove leading/trailing hyphens
+    .substring(0, 30); // Limit length
+}
+
 export async function POST(request: Request) {
   try {
-    const { username, password } = await request.json();
+    const { accountName, username, email, password } = await request.json();
 
-    // Basic validation
-    if (!username || !password) {
+    // Validation
+    if (!accountName || !username || !password) {
       return NextResponse.json(
-        { error: "Username and password are required" },
+        { error: "Account name, username, and password are required" },
         { status: 400 }
       );
     }
@@ -21,15 +31,34 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
+    // Generate subdomain from account name
+    let subdomain = generateSubdomain(accountName);
+
+    // Ensure subdomain is not empty
+    if (!subdomain) {
+      subdomain = `account-${Date.now()}`;
+    }
+
+    // Check if subdomain is available (add number suffix if needed)
+    let finalSubdomain = subdomain;
+    let counter = 1;
+
+    while (
+      await prisma.tenant.findUnique({ where: { subdomain: finalSubdomain } })
+    ) {
+      finalSubdomain = `${subdomain}-${counter}`;
+      counter++;
+    }
+
+    // Check if username already exists (across all tenants for now)
+    const existingUser = await prisma.user.findFirst({
       where: { username },
     });
 
     if (existingUser) {
       return NextResponse.json(
         { error: "Username already exists" },
-        { status: 409 } // 409 Conflict
+        { status: 409 }
       );
     }
 
@@ -37,22 +66,45 @@ export async function POST(request: Request) {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    // Create user
-    const user = await prisma.user.create({
-      data: {
-        username,
-        passwordHash,
-      },
+    // Create tenant and user in transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Create tenant
+      const tenant = await tx.tenant.create({
+        data: {
+          name: accountName,
+          subdomain: finalSubdomain,
+          plan: "FREE",
+          isActive: true,
+        },
+      });
+
+      // Create user as tenant owner
+      const user = await tx.user.create({
+        data: {
+          username,
+          email: email || null,
+          passwordHash,
+          role: "OWNER",
+          tenantId: tenant.id,
+          isActive: true,
+        },
+      });
+
+      return { tenant, user };
     });
 
-    // Return success response (don't return passwordHash)
     return NextResponse.json(
-      { id: user.id, username: user.username },
-      { status: 201 } // 201 Created
+      {
+        message: "Account created successfully",
+        accountName: result.tenant.name,
+        subdomain: result.tenant.subdomain,
+        tenantId: result.tenant.id,
+        userId: result.user.id,
+      },
+      { status: 201 }
     );
   } catch (error) {
     console.error("Signup Error:", error);
-    // Generic error for unexpected issues
     return NextResponse.json(
       { error: "An unexpected error occurred" },
       { status: 500 }

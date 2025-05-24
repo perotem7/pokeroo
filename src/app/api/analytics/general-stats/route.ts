@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { getTenantPrisma } from "@/lib/prisma-tenant";
 
 export interface GeneralStatsData {
   numberOfGames: number;
@@ -9,10 +10,22 @@ export interface GeneralStatsData {
 }
 
 export async function GET() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
+    const { prisma } = await getTenantPrisma();
+
     const completedEvents = await prisma.pokerEvent.findMany({
       where: {
         status: "COMPLETED",
+        host: {
+          createdById: session.user.id,
+        },
+        // tenantId automatically added by middleware
       },
       include: {
         players: {

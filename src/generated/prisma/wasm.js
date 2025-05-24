@@ -117,10 +117,26 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.TenantScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  subdomain: 'subdomain',
+  customDomain: 'customDomain',
+  plan: 'plan',
+  settings: 'settings',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
+  email: 'email',
   passwordHash: 'passwordHash',
+  role: 'role',
+  tenantId: 'tenantId',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -128,28 +144,31 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.PlayerScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  tenantId: 'tenantId',
+  createdById: 'createdById',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdById: 'createdById'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PokerEventScalarFieldEnum = {
   id: 'id',
   date: 'date',
   status: 'status',
+  tenantId: 'tenantId',
+  hostId: 'hostId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  hostId: 'hostId'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PlayerInEventScalarFieldEnum = {
   id: 'id',
   buyIns: 'buyIns',
   cashOutAmount: 'cashOutAmount',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  tenantId: 'tenantId',
   eventId: 'eventId',
-  playerId: 'playerId'
+  playerId: 'playerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -157,15 +176,38 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.TenantPlan = exports.$Enums.TenantPlan = {
+  FREE: 'FREE',
+  PROFESSIONAL: 'PROFESSIONAL',
+  ENTERPRISE: 'ENTERPRISE'
+};
+
+exports.UserRole = exports.$Enums.UserRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+};
+
 exports.EventStatus = exports.$Enums.EventStatus = {
   ONGOING: 'ONGOING',
   COMPLETED: 'COMPLETED',
@@ -173,6 +215,7 @@ exports.EventStatus = exports.$Enums.EventStatus = {
 };
 
 exports.Prisma.ModelName = {
+  Tenant: 'Tenant',
   User: 'User',
   Player: 'Player',
   PokerEvent: 'PokerEvent',

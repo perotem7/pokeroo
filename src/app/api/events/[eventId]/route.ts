@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getTenantPrisma } from "@/lib/prisma-tenant";
 
 // GET /api/events/[eventId] - Fetch details for a specific event
 // Use 'any' for context and assert the type for params
@@ -21,9 +21,12 @@ export async function GET(request: Request, context: any) {
   }
 
   try {
+    const { prisma } = await getTenantPrisma();
+
     const event = await prisma.pokerEvent.findUnique({
       where: {
         id: eventId,
+        // tenantId automatically added by middleware
       },
       include: {
         host: {
@@ -114,6 +117,8 @@ export async function PATCH(request: Request, context: any) {
       );
     }
 
+    const { prisma } = await getTenantPrisma();
+
     // Verify the event belongs to the user first
     const event = await prisma.pokerEvent.findFirst({
       where: {
@@ -121,6 +126,7 @@ export async function PATCH(request: Request, context: any) {
         host: {
           createdById: session.user.id,
         },
+        // tenantId automatically added by middleware
       },
       select: { id: true }, // Only need ID for verification
     });
@@ -136,6 +142,7 @@ export async function PATCH(request: Request, context: any) {
     const updatedEvent = await prisma.pokerEvent.update({
       where: {
         id: eventId,
+        // tenantId automatically added by middleware
       },
       data: {
         status: status, // Only update status for now
@@ -179,6 +186,8 @@ export async function DELETE(request: Request, context: any) {
   }
 
   try {
+    const { prisma } = await getTenantPrisma();
+
     // Verify the event belongs to the user before deleting
     const event = await prisma.pokerEvent.findFirst({
       where: {
@@ -186,6 +195,7 @@ export async function DELETE(request: Request, context: any) {
         host: {
           createdById: session.user.id,
         },
+        // tenantId automatically added by middleware
       },
       select: { id: true }, // Only need ID for verification
     });
@@ -202,6 +212,7 @@ export async function DELETE(request: Request, context: any) {
     await prisma.pokerEvent.delete({
       where: {
         id: eventId,
+        // tenantId automatically added by middleware
       },
     });
 

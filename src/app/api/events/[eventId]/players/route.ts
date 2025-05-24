@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getTenantPrisma } from "@/lib/prisma-tenant";
 
 // Remove or comment out the old interface if no longer needed elsewhere
 // interface RouteParams {
@@ -16,7 +16,7 @@ export async function POST(request: Request, context: any) {
   // Assert type for params
   const { eventId } = context.params as { eventId: string };
 
-  if (!session?.user?.id) {
+  if (!session?.user?.id || !session?.user?.tenantId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -37,6 +37,8 @@ export async function POST(request: Request, context: any) {
       );
     }
 
+    const { prisma } = await getTenantPrisma();
+
     // --- Verification Steps ---
     // 1. Verify Event exists and belongs to the user (via host)
     const event = await prisma.pokerEvent.findFirst({
@@ -45,6 +47,7 @@ export async function POST(request: Request, context: any) {
         host: {
           createdById: session.user.id,
         },
+        // tenantId automatically added by middleware
       },
       select: { id: true }, // Only need ID for verification
     });
@@ -60,6 +63,7 @@ export async function POST(request: Request, context: any) {
       where: {
         id: playerId,
         createdById: session.user.id,
+        // tenantId automatically added by middleware
       },
       select: { id: true, name: true }, // Need details for response
     });
@@ -75,6 +79,7 @@ export async function POST(request: Request, context: any) {
       where: {
         eventId: eventId,
         playerId: playerId,
+        // tenantId automatically added by middleware
       },
     });
     if (existingPlayerInEvent) {
@@ -90,6 +95,7 @@ export async function POST(request: Request, context: any) {
       data: {
         eventId: eventId,
         playerId: playerId,
+        tenantId: session.user.tenantId,
         // buyIns defaults to 0, cashOutAmount defaults to null
       },
       include: {

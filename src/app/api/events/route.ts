@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getTenantPrisma } from "@/lib/prisma-tenant";
 
 // GET /api/events - Fetch events created by the user (via hosted player)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -12,12 +12,15 @@ export async function GET(_request: Request) {
   }
 
   try {
+    const { prisma } = await getTenantPrisma();
+
     const events = await prisma.pokerEvent.findMany({
       where: {
         // Find events where the host player was created by the logged-in user
         host: {
           createdById: session.user.id,
         },
+        // tenantId automatically added by middleware
       },
       include: {
         host: {
@@ -46,7 +49,7 @@ export async function GET(_request: Request) {
 export async function POST(request: Request) {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!session?.user?.id || !session?.user?.tenantId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -60,11 +63,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify the chosen host belongs to the current user
+    const { prisma } = await getTenantPrisma();
+
+    // Verify the chosen host belongs to the current user and tenant
     const hostPlayer = await prisma.player.findFirst({
       where: {
         id: hostId,
         createdById: session.user.id, // Security check!
+        // tenantId automatically added by middleware
       },
     });
 
@@ -79,6 +85,7 @@ export async function POST(request: Request) {
     const newEvent = await prisma.pokerEvent.create({
       data: {
         hostId: hostId,
+        tenantId: session.user.tenantId,
         date: date ? new Date(date) : new Date(),
         // status has a default value in the schema
       },
