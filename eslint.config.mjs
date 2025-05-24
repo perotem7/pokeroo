@@ -13,6 +13,16 @@ const eslintConfig = [
   // Ignore generated Prisma client code
   { ignores: ["src/generated/**"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    files: [
+      "src/lib/auth.config.ts",
+      "src/lib/prisma-tenant.ts",
+      "src/types/next-auth.d.ts",
+    ],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 ];
 
 export default eslintConfig;

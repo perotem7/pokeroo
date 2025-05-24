@@ -2,20 +2,6 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getTenantSettings, convertChipsToNIS } from "@/lib/settings";
-// import { Prisma } from "@prisma/client"; // Removed unused import
-
-// Constants (could be shared)
-const CHIPS_PER_BUY_IN = 1000;
-const CHIPS_PER_NIS = 20;
-
-/* // Removed unused type definition
-type PlayerEventParticipationWithDetails = Prisma.PlayerInEventGetPayload<{
-  include: {
-    event: { select: { date: true } };
-    player: { select: { name: true } };
-  };
-}>;
-*/
 
 // Data structure for each player's trend point
 interface PlayerTrendPoint {

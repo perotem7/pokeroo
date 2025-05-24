@@ -20,11 +20,15 @@ export async function GET() {
     }
 
     // Return current settings or defaults
-    const settings = tenant.settings as any;
+    const settings = tenant.settings as Record<string, unknown> | null;
     return NextResponse.json({
       settings: {
-        chipsPerBuyIn: settings?.chipsPerBuyIn || 1000,
-        nisPerBuyIn: settings?.nisPerBuyIn || 50,
+        chipsPerBuyIn:
+          typeof settings?.chipsPerBuyIn === "number"
+            ? settings.chipsPerBuyIn
+            : 1000,
+        nisPerBuyIn:
+          typeof settings?.nisPerBuyIn === "number" ? settings.nisPerBuyIn : 50,
       },
     });
   } catch (error) {
@@ -73,7 +77,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Tenant not found" }, { status: 404 });
     }
 
-    const currentSettings = (tenant.settings as any) || {};
+    const currentSettings = (tenant.settings as Record<string, unknown>) || {};
     const updatedSettings = {
       ...currentSettings,
       chipsPerBuyIn: parseInt(chipsPerBuyIn),

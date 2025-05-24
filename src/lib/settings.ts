@@ -23,10 +23,16 @@ export async function getTenantSettings(
       return DEFAULT_SETTINGS;
     }
 
-    const settings = tenant.settings as any;
+    const settings = tenant.settings as Record<string, unknown>;
     return {
-      chipsPerBuyIn: settings.chipsPerBuyIn || DEFAULT_SETTINGS.chipsPerBuyIn,
-      nisPerBuyIn: settings.nisPerBuyIn || DEFAULT_SETTINGS.nisPerBuyIn,
+      chipsPerBuyIn:
+        typeof settings.chipsPerBuyIn === "number"
+          ? settings.chipsPerBuyIn
+          : DEFAULT_SETTINGS.chipsPerBuyIn,
+      nisPerBuyIn:
+        typeof settings.nisPerBuyIn === "number"
+          ? settings.nisPerBuyIn
+          : DEFAULT_SETTINGS.nisPerBuyIn,
     };
   } catch (error) {
     console.error("Failed to fetch tenant settings:", error);
