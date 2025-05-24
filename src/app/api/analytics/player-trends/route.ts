@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { getTenantSettings, convertChipsToNIS } from "@/lib/settings";
 // import { Prisma } from "@prisma/client"; // Removed unused import
 
 // Constants (could be shared)
@@ -33,8 +35,20 @@ export type PlayerTrendsData = Record<
 
 export async function GET() {
   try {
-    // Fetch all players with their completed event participations
+    const session = await auth();
+
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    // Get tenant settings
+    const settings = await getTenantSettings(session.user.tenantId);
+
+    // Fetch all players for the tenant with their completed event participations
     const players = await prisma.player.findMany({
+      where: {
+        tenantId: session.user.tenantId, // Filter by tenant
+      },
       include: {
         pokerEvents: {
           // Relation name from Player model to PlayerInEvent
@@ -64,9 +78,10 @@ export async function GET() {
       // Iterate through chronologically sorted events for the player
       for (const participation of player.pokerEvents) {
         const cashOutChips = participation.cashOutAmount ?? 0;
-        const eventProfitLossNIS =
-          (cashOutChips - participation.buyIns * CHIPS_PER_BUY_IN) /
-          CHIPS_PER_NIS;
+        const eventProfitLossNIS = convertChipsToNIS(
+          cashOutChips - participation.buyIns * settings.chipsPerBuyIn,
+          settings
+        );
 
         cumulativeProfitLoss += eventProfitLossNIS;
 

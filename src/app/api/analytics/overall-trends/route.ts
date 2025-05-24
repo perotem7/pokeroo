@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { getTenantSettings, convertChipsToNIS } from "@/lib/settings";
 import type { PokerEvent, PlayerInEvent } from "@/generated/prisma";
-
-// Constants from event-summary (could be shared)
-const CHIPS_PER_BUY_IN = 1000;
-const CHIPS_PER_NIS = 20;
-const NIS_PER_BUY_IN = CHIPS_PER_BUY_IN / CHIPS_PER_NIS;
 
 // Define a more specific type for the event data needed here
 type EventForTrend = Pick<PokerEvent, "id" | "date"> & {
@@ -22,9 +19,19 @@ export interface OverallTrendPoint {
 
 export async function GET() {
   try {
+    const session = await auth();
+
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    // Get tenant settings
+    const settings = await getTenantSettings(session.user.tenantId);
+
     const events: EventForTrend[] = await prisma.pokerEvent.findMany({
       where: {
         status: "COMPLETED",
+        tenantId: session.user.tenantId, // Filter by tenant
       },
       select: {
         // Select only necessary fields
@@ -54,10 +61,8 @@ export async function GET() {
         eventCashOutChips += p.cashOutAmount ?? 0;
       });
 
-      const eventBuyInsNIS = eventBuyInsCount * NIS_PER_BUY_IN;
-      const eventCashOutNIS = eventCashOutChips / CHIPS_PER_NIS;
-      // Net for the event should be cash out - buy in
-      // const eventNetNIS = eventCashOutNIS - eventBuyInsNIS; // Removed unused variable
+      const eventBuyInsNIS = eventBuyInsCount * settings.nisPerBuyIn;
+      const eventCashOutNIS = convertChipsToNIS(eventCashOutChips, settings);
 
       cumulativeBuyIns += eventBuyInsNIS;
       cumulativeCashOuts += eventCashOutNIS;

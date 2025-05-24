@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Player, PokerEvent, PlayerInEvent } from "@/generated/prisma";
 import CashOutModal from "@/components/CashOutModal";
+import { useSettings } from "@/hooks/useSettings";
 
 // Define complex type for the event details returned by the API
 type PlayerDetails = {
@@ -29,6 +30,11 @@ export default function EventDetailClientPage({
 }) {
   const { status } = useSession();
   const router = useRouter();
+  const {
+    settings,
+    loading: settingsLoading,
+    convertChipsToNIS,
+  } = useSettings();
 
   const [eventDetails, setEventDetails] = useState<EventDetails | null>(null);
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
@@ -42,7 +48,11 @@ export default function EventDetailClientPage({
   const [selectedPlayerForCashOut, setSelectedPlayerForCashOut] =
     useState<EventPlayer | null>(null);
 
-  const isLoading = status === "loading" || isLoadingEvent || isLoadingPlayers;
+  const isLoading =
+    status === "loading" ||
+    isLoadingEvent ||
+    isLoadingPlayers ||
+    settingsLoading;
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -558,8 +568,9 @@ export default function EventDetailClientPage({
                   </tr>
                 ) : (
                   eventDetails.players.map((player) => {
-                    // Calculate profit/loss: cashOutAmount - (buyIns * 1000 chips)
-                    const buyInTotalChips = player.buyIns * 1000; // 1000 chips per buy-in
+                    // Calculate profit/loss: cashOutAmount - (buyIns * chipsPerBuyIn)
+                    const buyInTotalChips =
+                      player.buyIns * settings.chipsPerBuyIn;
                     const profitLoss =
                       (player.cashOutAmount ?? 0) - buyInTotalChips; // Assuming cashOutAmount is also in chips
                     const profitLossClass =
@@ -569,8 +580,8 @@ export default function EventDetailClientPage({
                         ? "text-red-600"
                         : "";
 
-                    // Calculate monetary value (1000 chips = 50 NIS => 1 chip = 0.05 NIS)
-                    const monetaryValue = profitLoss * 0.05;
+                    // Calculate monetary value using tenant settings
+                    const monetaryValue = convertChipsToNIS(profitLoss);
 
                     return (
                       <tr key={player.id}>
@@ -675,7 +686,7 @@ export default function EventDetailClientPage({
                 <div className="text-sm text-blue-700 mb-1">Total Buy-Ins</div>
                 <div className="text-2xl font-bold">
                   {eventDetails.players.reduce(
-                    (sum, p) => sum + p.buyIns * 1000, // Use 1000 multiplier
+                    (sum, p) => sum + p.buyIns * settings.chipsPerBuyIn,
                     0
                   )}{" "}
                   chips
@@ -690,7 +701,7 @@ export default function EventDetailClientPage({
                     (sum, p) => sum + (p.cashOutAmount ?? 0),
                     0
                   )}{" "}
-                  chips {/* Assuming cashOut is chips */}
+                  chips
                 </div>
               </div>
               <div className="bg-gray-50 p-3 rounded">
@@ -702,7 +713,7 @@ export default function EventDetailClientPage({
                     0
                   ) -
                     eventDetails.players.reduce(
-                      (sum, p) => sum + p.buyIns * 1000, // Use 1000 multiplier for buy-ins
+                      (sum, p) => sum + p.buyIns * settings.chipsPerBuyIn,
                       0
                     )}{" "}
                   chips

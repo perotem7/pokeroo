@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma"; // Assuming prisma client is setup at lib/prisma
+import { auth } from "@/lib/auth";
+import { getTenantSettings, convertChipsToNIS } from "@/lib/settings";
 import type { PokerEvent, PlayerInEvent, Player } from "@/generated/prisma";
-
-// --- Constants for calculation based on user formula ---
-const CHIPS_PER_BUY_IN = 1000;
-const CHIPS_PER_NIS = 20;
-const NIS_PER_BUY_IN = CHIPS_PER_BUY_IN / CHIPS_PER_NIS; // Should be 50
 
 interface ParticipantDetails {
   playerId: string;
@@ -40,10 +37,20 @@ type EventWithDetails = PokerEvent & {
 
 export async function GET() {
   try {
+    const session = await auth();
+
+    if (!session?.user?.tenantId) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    // Get tenant settings
+    const settings = await getTenantSettings(session.user.tenantId);
+
     // Explicitly type the result of findMany
     const events: EventWithDetails[] = await prisma.pokerEvent.findMany({
       where: {
         status: "COMPLETED", // Only fetch completed events for summary
+        tenantId: session.user.tenantId, // Filter by tenant
       },
       include: {
         host: true, // Include host player details
@@ -73,9 +80,11 @@ export async function GET() {
           (p: PlayerInEventWithPlayer) => {
             const cashOutChips = p.cashOutAmount ?? 0;
 
-            // Calculate Player Profit/Loss in NIS using the corrected formula
-            const profitLossNIS =
-              (cashOutChips - p.buyIns * CHIPS_PER_BUY_IN) / CHIPS_PER_NIS;
+            // Calculate Player Profit/Loss in NIS using the tenant settings
+            const profitLossNIS = convertChipsToNIS(
+              cashOutChips - p.buyIns * settings.chipsPerBuyIn,
+              settings
+            );
 
             totalBuyInsCount += p.buyIns;
             totalCashOutChips += cashOutChips;
@@ -103,12 +112,12 @@ export async function GET() {
           }
         );
 
-        const totalPotValueNIS = totalBuyInsCount * NIS_PER_BUY_IN;
+        const totalPotValueNIS = totalBuyInsCount * settings.nisPerBuyIn;
         const averageProfitLossNIS =
           event.players.length > 0
             ? totalProfitLossNIS / event.players.length
             : 0;
-        const totalCashOutNIS = totalCashOutChips / CHIPS_PER_NIS; // Calculate total cash out in NIS
+        const totalCashOutNIS = convertChipsToNIS(totalCashOutChips, settings); // Calculate total cash out in NIS
 
         // Note: totalProfitLossNIS should ideally be close to zero if accounting is perfect
         // console.log(`Event ${event.id}: Total P/L (NIS) = ${totalProfitLossNIS}, Total Pot (NIS) = ${totalPotValueNIS}, Total Cashout (Chips) = ${totalCashOutChips}`);

@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getTenantSettings, convertChipsToNIS } from "@/lib/settings";
 
 // Define the structure for player performance data
 interface PlayerPerformance {
   playerId: string;
   playerName: string;
   totalBuyInsCount: number; // Count of buy-ins
-  totalBuyInValue: number; // Calculated: totalBuyInsCount * 50 (NIS)
+  totalBuyInValue: number; // Calculated: totalBuyInsCount * nisPerBuyIn
   totalCashOutAmount: number; // Aggregated cash-out value in NIS
   totalCashOutChips: number; // Aggregated cash-out in Chips
   netProfitLoss: number; // Calculated: totalCashOutAmount (NIS) - totalBuyInValue (NIS)
@@ -19,28 +20,20 @@ interface PlayerPerformance {
 export async function GET() {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!session?.user?.tenantId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userId = session.user.id;
-  const buyInValue = 50; // Value per buy-in in NIS
+  const tenantId = session.user.tenantId;
+
+  // Get tenant settings
+  const settings = await getTenantSettings(tenantId);
 
   try {
-    // Fetch all PlayerInEvent records for events hosted by the user's players
-    // or where the user's players have participated.
-    // We need to get all players created by the user first.
-    const userPlayers = await prisma.player.findMany({
-      where: { createdById: userId },
-      select: { id: true },
-    });
-    const userPlayerIds = userPlayers.map((p) => p.id);
-
-    // Fetch relevant PlayerInEvent entries
+    // Fetch all PlayerInEvent records for the tenant
     const playerEventEntries = await prisma.playerInEvent.findMany({
       where: {
-        // Include entries where the player is one created by the user
-        playerId: { in: userPlayerIds },
+        tenantId: tenantId, // Filter by tenant
         // Optionally filter by event status if needed, e.g., only completed events
         // event: {
         //   status: "COMPLETED",
@@ -61,7 +54,7 @@ export async function GET() {
       const playerName = entry.player.name;
       const buyInsCount = entry.buyIns;
       const cashOutChips = entry.cashOutAmount ?? 0; // Chip count
-      const cashOutNis = cashOutChips * (50 / 1000); // Convert chips to NIS
+      const cashOutNis = convertChipsToNIS(cashOutChips, settings); // Convert chips to NIS using settings
 
       if (!performanceMap.has(playerId)) {
         performanceMap.set(playerId, {
@@ -87,7 +80,7 @@ export async function GET() {
 
     // Calculate final NIS values, averages, and convert map to array
     const performanceData = Array.from(performanceMap.values()).map((perf) => {
-      perf.totalBuyInValue = perf.totalBuyInsCount * buyInValue; // NIS
+      perf.totalBuyInValue = perf.totalBuyInsCount * settings.nisPerBuyIn; // Use tenant setting
       perf.netProfitLoss = perf.totalCashOutAmount - perf.totalBuyInValue; // NIS - NIS
       // Calculate averages, handle division by zero
       perf.avgBuyIns =
